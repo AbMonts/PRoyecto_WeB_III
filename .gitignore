@@ -1,0 +1,32 @@
+# Dependencias de Composer
+/vendor
+
+# Dependencias de Node.js
+/node_modules
+
+# Archivos de entorno
+.env
+
+# Configuración específica de Homestead
+Homestead.yaml
+Homestead.json
+
+# Archivos generados automáticamente
+/public/storage
+/storage/*.key
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Configuración de IDEs y editores
+.idea/
+.vscode/
+
+# Archivos de compilación y logs
+/bootstrap/cache/
+*.log
+
+# Otros archivos innecesarios
+*.swp
+*.bak
