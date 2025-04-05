@@ -15,12 +15,14 @@
     
 
     <nav class="barra">
-        <a href="inicio">Inicio</a>
-        <a href="propiedades">Propiedades</a>
-        <a href="registrar_propiedad">Registrar Propiedad</a>
-        <a href="registro">Registro</a>
-        <a href="login">Login</a>
-        <a href="perfil">Perfil</a>
+        <a href="{{ route('index') }}">Inicio</a>
+        <a href="{{ route('propiedades') }}">Propiedades</a>
+        <a href="{{ route('propiedades.create') }}">Registrar Propiedad</a>
+        <a href="{{ route('registro') }}">Registro</a>
+        <a href="{{ route('login') }}">Login</a>
+        @auth
+            <a href="{{ route('perfil') }}">Perfil</a>
+        @endauth
     </nav>
 
     <section class="form-cont">

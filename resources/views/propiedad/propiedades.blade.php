@@ -15,19 +15,20 @@
     
 
     <nav class="barra">
-        <a href="inicio">Inicio</a>
-        <a href="registrar_propiedad">Registrar Propiedad</a>
-        <a href="contacto">Contacto</a>
-        <a href="registro">Registro</a>
-        <a href="login">Login</a>
-        <a href="perfil">Perfil</a>
+        <!-- Las rutas ahora usan Blade para generar las URLs correctas -->
+        <a href="{{ route('index') }}">Inicio</a>
+        <a href="{{ route('propiedades.create') }}">Registrar Propiedad</a>
+        <a href="{{ route('contacto') }}">Contacto</a>
+        <a href="{{ route('registro') }}">Registro</a>
+        <a href="{{ route('login') }}">Login</a>
+        <a href="{{ route('perfil') }}">Perfil</a>
     </nav>
 
     <main>
         <section class="cont-1">
             <h2 class="subtitulo">Buscar Propiedades</h2>
-            <form class="filtros">
-                <select>
+            <form class="filtros" method="GET" action="{{ route('propiedades.showAll') }}">
+            <select>
                     <option>Venta</option>
                     <option>Renta</option>
                 </select>
@@ -46,37 +47,30 @@
         <section class="cont-2">
             <h2 class="subtitulo">Propiedades Disponibles</h2>
             <div class="propiedades">
-                <div class="propiedad">
-                    <img src="../imgs/casa3.jpg" alt="Casa en CDMX">
-                    <h3>Casa en CDMX</h3>
-                    <p>Precio: $2,500,000</p>
-                    <p>Ubicación: Ciudad de México</p>
-                    <a href="https://maps.app.goo.gl/gK8EUkmidGKGGDzd9">Ver más</a>
-                </div>
-    
-                <div class="propiedad">
-                    <img src="../imgs/casa1.jpg" alt="Departamento en Monterrey">
-                    <h3>Departamento en Monterrey</h3>
-                    <p>Precio: $1,800,000</p>
-                    <p>Ubicación: Monterrey</p>
-                    <a href="propiedad.html?id=2">Ver más</a>
-                </div>
+                @foreach($propiedades as $propiedad)
+                    <div class="propiedad">
+                        <!-- Muestra la primera imagen relacionada con la propiedad -->
+                        <img src="{{ asset($propiedad->imagenes->first()->imagen_url ?? 'imgs/default.jpg') }}" alt="{{ $propiedad->descripcion }}">
+                        <h3>{{ $propiedad->descripcion }}</h3>
+                        <p>Precio: ${{ number_format($propiedad->precio, 2) }}</p>
+                        <p>Ubicación: {{ $propiedad->direccion }}</p>
+                        <!-- Enlace a los detalles de la propiedad -->
+                        <a href="{{ route('propiedades.show', $propiedad->id) }}">Ver más</a>
+                    </div>
+                @endforeach
             </div>
         </section>
-        
-
     </main>
    
-
     <footer class="pie">
         <p class="grande">Creado por Honey y Sunshine</p>
 
         <div class="icons">
-           
+            <!-- Aquí van los iconos de redes sociales si los tienes -->
         </div>
 
-            <section class="cont-2">
-                <div class="cont"></div>
+        <section class="cont-2">
+            <div class="cont"></div>
         </section>
 
     </footer>

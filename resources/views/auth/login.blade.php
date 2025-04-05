@@ -12,13 +12,25 @@
     <section class="login-container">
         <h1 >Iniciar Sesión</h1>
 
-        <form action="" method="POST" class="formulario">
+        @if ($errors->any())
+            <div class="errores">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li style="color:red">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('autenticar') }}" method="POST" class="formulario">
+            @csrf
             <input type="email" name="email" placeholder="Correo electrónico" required>
             <input type="password" name="password" placeholder="Contraseña" required>
             <button type="submit">Iniciar sesión</button>
         </form>
 
-        <p class="registro-texto">¿No tienes una cuenta? <a href="registro.html">Regístrate</a></p>
+
+        <p class="registro-texto">¿No tienes una cuenta? <a href="{{ route('registro') }}">Registrate 😊</a></p>
     </section>
 
     <footer class="pie">

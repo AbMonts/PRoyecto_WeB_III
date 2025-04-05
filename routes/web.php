@@ -1,47 +1,38 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PropiedadController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\ContactoController;
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/', [PropiedadController::class, 'index'])->name('index');
+
+
+// Propiedades
+Route::get('/propiedades/{id}', [PropiedadController::class, 'show'])->name('propiedades.show');
+Route::get('/propiedades/todas', [PropiedadController::class, 'showAll'])->name('propiedades.showAll');
+Route::get('/propiedades', [PropiedadController::class, 'listado'])->name('propiedades');
+
+
+Route::middleware('auth')->group(function () {
+    Route::get('/propiedad/registrarPropiedad', [PropiedadController::class, 'create'])->name('propiedades.create');
+    Route::post('/propiedades', [PropiedadController::class, 'store'])->name('propiedades.store');
 });
 
-// -----------------------inicio
-Route::get('/auth/inicio', function () {
-    return view('index');
-});
+// Contacto
+Route::get('/contacto', [ContactoController::class, 'index'])->name('contacto');
+Route::post('/contacto', [ContactoController::class, 'send']);
 
-// -------------------------login
-Route::get('/auth/login', function () {
-    return view('login');
-});
+// Autenti
+Route::get('/registro', [AuthController::class, 'registro'])->name('registro');
+Route::post('/registro', [AuthController::class, 'registrarUsuario'])->name('registro.store');
 
-//------------- perfil
-Route::get('/perfil', function () {
-    return view('perfil');
-});
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'autenticar'])->name('autenticar');
 
-//----------------- propiedades
-Route::get('/propiedad/propiedades', function () {
-    return view('propiedades');
-});
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// -----------------detalles de una propiedad (param)
-Route::get('/propiedad/propiedad/{id}', function ($id) {
-    return view('detalles', ['id' => $id]);
-});
-
-// -------------------contacto
-Route::get('/contacto', function () {
-    return view('contacto');
-});
-
-//--------------------registro de usuario
-Route::get('/auth/registro', function () {
-    return view('registro');
-});
-
-// --------------------registro de propiedad
-Route::get('/propiedad/registrar_propiedad', function () {
-    return view('registrar_propiedad');
-});
+// Perfil
+Route::get('/perfil', [PerfilController::class, 'show'])->name('perfil')->middleware('auth');

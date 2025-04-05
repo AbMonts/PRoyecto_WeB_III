@@ -12,51 +12,51 @@
         <h1 >Inmobiliaria Uriangato</h1>
     </div>
     
-
     <nav class="barra">
-        <a href="propiedades">Propiedades</a>
-        <a href="registrar_propiedad">Registrar Propiedad</a>
-        <a href="contacto">Contacto</a>
-        <a href="registro.">Registro</a>
-        <a href="login">Login</a>
-        <a href="perfil">Perfil</a>
+        <a href="{{ route('propiedades') }}">Propiedades</a>
+        <a href="{{ route('propiedades.create') }}">Crear Propiedad</a>
+        <a href="{{ route('contacto') }}">Contacto</a>
+        <a href="{{ route('registro') }}">Registro</a>
+        <a href="{{ route('login') }}">Login</a>
+
+        @auth
+            <a href="{{ route('perfil') }}">Perfil</a>
+        @endauth
     </nav>
+
+
 
     <main class="inicio-cont">
 
-    <section class="cont-1">   
-    <h2 class="subtitulo">Encuentra tu hogar ideal</h2>  
-        <form  class="filtros">
-            <select>
-                <option>Venta</option>
-                <option>Renta</option>
-            </select>
-            <input type="text" placeholder="Ubicación">
-            <button>Buscar</button>
-        </form>
-    </section>
+        <section class="cont-1">
+            <h2 class="subtitulo">Encuentra tu hogar ideal</h2>
+            <form class="filtros" action="{{ route('propiedades.showAll') }}" method="GET">
+            <select name="tipo">
+                    <option value="venta">Venta</option>
+                    <option value="renta">Renta</option>
+                </select>
+                <input type="text" name="ubicacion" placeholder="Ubicación">
+                <button type="submit">Buscar</button>
+            </form>
+        </section>
 
-    <section class="cont-2">
-        <h2 class="subtitulo">Propiedades destacadas</h2>
-        <div class="propiedades">
+        <section class="cont-2">
+    <h2 class="subtitulo">Propiedades destacadas</h2>
+    <div class="propiedades">
+        @foreach($propiedades as $propiedad)
             <div class="propiedad">
-                <img src="../imgs/casa3.jpg" alt="Casa en CDMX">
-                <h3>Casa en CDMX</h3>
-                <p>Precio: $2,500,000</p>
-                <p>Ubicación: Ciudad de México</p>
-                <a href="https://maps.app.goo.gl/gK8EUkmidGKGGDzd9">Ver más</a>
-            </div>
+            <img src="{{ asset($propiedad->imagenes->first()->imagen_url ?? 'imgs/default.jpg') }}" alt="{{ $propiedad->descripcion }}">
+            <h3>{{ $propiedad->descripcion }}</h3>
+                <p>Precio: ${{ number_format($propiedad->precio, 2) }}</p>
+                <p>Ubicación: {{ $propiedad->direccion }}</p>
+                <a href="{{ route('propiedades.show', $propiedad->id) }}">Ver más</a>
+                </div>
+        @endforeach
+    </div>
+</section>
 
-            <div class="propiedad">
-                <img src="../imgs/casa1.jpg" alt="Departamento en Monterrey">
-                <h3>Departamento en Monterrey</h3>
-                <p>Precio: $1,800,000</p>
-                <p>Ubicación: Monterrey</p>
-                <a href="propiedad.html?id=2">Ver más</a>
-            </div>
-        </div>
-    </section>
-</main>
+
+    </main>
 
     <footer class="pie">
         <p class="grande">Creado por Honey y Sunshine</p>
