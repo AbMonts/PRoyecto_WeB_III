@@ -18,8 +18,11 @@
         <a href="{{ route('index') }}">Inicio</a>
         <a href="{{ route('propiedades') }}">Propiedades</a>
         <a href="{{ route('propiedades.create') }}">Registrar Propiedad</a>
+        @guest
         <a href="{{ route('registro') }}">Registro</a>
         <a href="{{ route('login') }}">Login</a>
+        @endguest
+
         @auth
             <a href="{{ route('perfil') }}">Perfil</a>
         @endauth
@@ -27,7 +30,15 @@
 
     <section class="form-cont">
         <h2 class="subtitulo">Contáctanos</h2>
-        <form action="enviar_mensaje.php" method="POST" class="formulario">
+        
+        @if(session('success'))
+            <div class="alerta-exito">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <form action="{{ route('enviar.mensaje') }}" method="POST" class="formulario">
+            @csrf
             <input type="text" name="nombre" placeholder="Tu nombre" required>
             <input type="email" name="email" placeholder="Tu correo" required>
             <input type="tel" name="telefono" placeholder="Tu teléfono (opcional)">
@@ -35,6 +46,7 @@
             <button type="submit">Enviar</button>
         </form>
     </section>
+
 
     <section class="cont-contacto">
         <h2 class="subtitulo">Información de contacto</h2>

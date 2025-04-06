@@ -16,8 +16,10 @@
         <a href="{{ route('propiedades') }}">Propiedades</a>
         <a href="{{ route('propiedades.create') }}">Crear Propiedad</a>
         <a href="{{ route('contacto') }}">Contacto</a>
+        @guest
         <a href="{{ route('registro') }}">Registro</a>
         <a href="{{ route('login') }}">Login</a>
+        @endguest
 
         @auth
             <a href="{{ route('perfil') }}">Perfil</a>
@@ -30,7 +32,7 @@
 
         <section class="cont-1">
             <h2 class="subtitulo">Encuentra tu hogar ideal</h2>
-            <form class="filtros" action="{{ route('propiedades.showAll') }}" method="GET">
+            <form class="filtros" action="{{ route('index') }}" method="GET">
             <select name="tipo">
                     <option value="venta">Venta</option>
                     <option value="renta">Renta</option>
@@ -40,22 +42,35 @@
             </form>
         </section>
 
-        <section class="cont-2">
-    <h2 class="subtitulo">Propiedades destacadas</h2>
-    <div class="propiedades">
-        @foreach($propiedades as $propiedad)
-            <div class="propiedad">
-            <img src="{{ asset($propiedad->imagenes->first()->imagen_url ?? 'imgs/default.jpg') }}" alt="{{ $propiedad->descripcion }}">
-            <h3>{{ $propiedad->descripcion }}</h3>
-                <p>Precio: ${{ number_format($propiedad->precio, 2) }}</p>
-                <p>Ubicación: {{ $propiedad->direccion }}</p>
-                <a href="{{ route('propiedades.show', $propiedad->id) }}">Ver más</a>
-                </div>
-        @endforeach
+    <section class="cont-2">
+        <h2 class="subtitulo">Propiedades destacadas</h2>
+        <div class="propiedades">
+
+                @if($propiedades->isEmpty())
+                    <p>No hay coincidencias con los filtros seleccionados.</p>
+                @else
+                    @foreach($propiedades as $propiedad)
+                    <div class="propiedad">
+                    <img src="{{ asset($propiedad->imagenes->first()->imagen_url ?? 'imgs/default.jpg') }}" alt="{{ $propiedad->descripcion }}">
+                    <h3><strong>{{ $propiedad->descripcion }}</strong></h3>
+                        <p><strong>Precio:</strong> ${{ number_format($propiedad->precio, 2) }}</p>
+                        <p><strong>Ubicación:</strong> {{ $propiedad->direccion }}</p>
+                        <p><strong>Vistas:</strong> {{ $propiedad->vistas }}</p>
+                        <p><strong>Destacada por:</strong> {{ $propiedad->total_destacados }} usuarios</p>
+
+                        <a href="{{ route('propiedades.show', $propiedad->id) }}">Ver más</a>
+                        </div>
+                @endforeach
+                @endif  
+        </div>
+    </section>
+
+    <div>
+        <a href="{{ route('propiedades') }}">
+            <button>Búsqueda Avanzada</button>
+        </a>
     </div>
-</section>
-
-
+   
     </main>
 
     <footer class="pie">

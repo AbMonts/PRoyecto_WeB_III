@@ -11,10 +11,19 @@ class Usuario extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $table = 'usuarios';
-    protected $fillable = ['tipo', 'nombre', 'email', 'telefono', 'username', 'password'];
+    protected $fillable = [
+        'tipo',
+        'nombre',
+        'email',
+        'telefono',
+        'username',
+        'password',
+    ];
 
     protected $hidden = ['password'];
 
+    public $timestamps = true;
+    
     // Mutator para encriptar la contraseña antes de guardarla en la BD
     public function setPasswordAttribute($value)
     {
@@ -25,6 +34,19 @@ class Usuario extends Authenticatable
     {
         return $this->hasMany(Propiedad::class, 'usuario_id');
     }
+
+    public function propiedadesDestacadas()
+    {
+        return $this->belongsToMany(Propiedad::class, 'destacados');
+    }
+
+
+
+    public function historialVistas()
+    {
+        return $this->hasMany(HistorialVista::class);
+    }
+
 }
 
 

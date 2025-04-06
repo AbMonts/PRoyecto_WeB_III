@@ -15,12 +15,22 @@
 
     <nav class="barra">
         <a href="{{ route('index') }}">Inicio</a>
-        <a href="{{ route('propiedades.index') }}">Propiedades</a>
-        <a href="{{ route('propiedades.create') }}">Registrar Propiedad</a>
+        <a href="{{ route('propiedades') }}">Propiedades</a>
+        <a href="{{ route('propiedades.create') }}">Crear Propiedad</a>
         <a href="{{ route('contacto') }}">Contacto</a>
-        <a href="{{ route('registro') }}">Registro</a>
-        <a href="{{ route('login') }}">Login</a>
-        <a href="{{ route('perfil') }}">Perfil</a>
+        @guest
+            <a href="{{ route('registro') }}">Registro</a>
+            <a href="{{ route('login') }}">Login</a>
+        @endguest
+
+        @auth
+            <a href="{{ route('perfil') }}">Perfil</a>
+            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                @csrf
+                <button type="submit" style="background: none; border: none; color: blue; cursor: pointer;">Cerrar sesión</button>
+            </form>
+        @endauth
+
     </nav>
 
     <main class="cont-detalles">
@@ -37,7 +47,21 @@
                 <p><strong>Dimensiones:</strong> {{ $propiedad->dimensiones }} m²</p>
                 <p><strong>Estado:</strong> {{ $propiedad->estado }}</p>
                 <p><strong>Cochera:</strong> {{ $propiedad->garage ? 'Sí' : 'No' }}</p>
-                <button>Solicitar Información</button>
+                <p><strong>Vistas:</strong> {{ $propiedad->vistas }}</p>
+                <p><strong>Destacada por:</strong> {{ $propiedad->total_destacados }} usuarios</p>
+
+                <button href="{{ route('contacto') }}">Pide mas informacion</a></button>
+                <form action="{{ route('propiedades.destacar', $propiedad->id) }}" method="POST">
+                    @csrf
+                    <button type="submit">
+                        @if(auth()->user() && auth()->user()->propiedadesDestacadas->contains($propiedad->id))
+                            💔 Quitar de destacados
+                        @else
+                            ⭐ Marcar como destacado
+                        @endif
+                    </button>
+                </form>
+
             </div>
         </section>
     </main>

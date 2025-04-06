@@ -19,47 +19,64 @@
         <a href="{{ route('index') }}">Inicio</a>
         <a href="{{ route('propiedades.create') }}">Registrar Propiedad</a>
         <a href="{{ route('contacto') }}">Contacto</a>
+        @guest
         <a href="{{ route('registro') }}">Registro</a>
         <a href="{{ route('login') }}">Login</a>
-        <a href="{{ route('perfil') }}">Perfil</a>
+        @endguest
+
+        @auth
+            <a href="{{ route('perfil') }}">Perfil</a>
+        @endauth
     </nav>
 
     <main>
         <section class="cont-1">
             <h2 class="subtitulo">Buscar Propiedades</h2>
-            <form class="filtros" method="GET" action="{{ route('propiedades.showAll') }}">
-            <select>
-                    <option>Venta</option>
-                    <option>Renta</option>
+            <form class="filtros" method="GET" action="{{ route('propiedades') }}">
+                <select name="Venta">
+                    <option value="Venta">Venta</option>
+                    <option value="Renta">Renta</option>
                 </select>
-                <input type="text" placeholder="Ubicación">
-                <input type="number" placeholder="Precio mínimo">
-                <input type="number" placeholder="Precio máximo">
-                <select>
-                    <option>1 Habitación</option>
-                    <option>2 Habitaciones</option>
-                    <option>3+ Habitaciones</option>
+
+                <input type="text" name="ubicacion" placeholder="Ubicación" value="{{ request('ubicacion') }}">
+                
+                <input type="number" name="precio_min" placeholder="Precio mínimo" value="{{ request('precio_min') }}">
+                <input type="number" name="precio_max" placeholder="Precio máximo" value="{{ request('precio_max') }}">
+
+                <select name="habitaciones">
+                    <option value="">Habitaciones</option>
+                    <option value="1">1 Habitación</option>
+                    <option value="2">2 Habitaciones</option>
+                    <option value="3">3+ Habitaciones</option>
                 </select>
-                <button>Buscar</button>
+
+                <button type="submit">Buscar</button>
             </form>
+
         </section>
         
         <section class="cont-2">
-            <h2 class="subtitulo">Propiedades Disponibles</h2>
-            <div class="propiedades">
-                @foreach($propiedades as $propiedad)
+        <h2 class="subtitulo">Propiedades destacadas</h2>
+        <div class="propiedades">
+
+                @if($propiedades->isEmpty())
+                    <p>No hay coincidencias con los filtros seleccionados.</p>
+                @else
+                    @foreach($propiedades as $propiedad)
                     <div class="propiedad">
-                        <!-- Muestra la primera imagen relacionada con la propiedad -->
-                        <img src="{{ asset($propiedad->imagenes->first()->imagen_url ?? 'imgs/default.jpg') }}" alt="{{ $propiedad->descripcion }}">
-                        <h3>{{ $propiedad->descripcion }}</h3>
-                        <p>Precio: ${{ number_format($propiedad->precio, 2) }}</p>
-                        <p>Ubicación: {{ $propiedad->direccion }}</p>
-                        <!-- Enlace a los detalles de la propiedad -->
+                    <img src="{{ asset($propiedad->imagenes->first()->imagen_url ?? 'imgs/default.jpg') }}" alt="{{ $propiedad->descripcion }}">
+                    <h3><strong>{{ $propiedad->descripcion }}</strong></h3>
+                        <p><strong>Precio:</strong> ${{ number_format($propiedad->precio, 2) }}</p>
+                        <p><strong>Ubicación:</strong> {{ $propiedad->direccion }}</p>
+                        <p><strong>Vistas:</strong> {{ $propiedad->vistas }}</p>
+                        <p><strong>Destacada por:</strong> {{ $propiedad->total_destacados }} usuarios</p>
+
                         <a href="{{ route('propiedades.show', $propiedad->id) }}">Ver más</a>
-                    </div>
+                        </div>
                 @endforeach
-            </div>
-        </section>
+                @endif  
+        </div>
+    </section>
     </main>
    
     <footer class="pie">

@@ -17,7 +17,12 @@
         <a href="{{ route('index') }}">Inicio</a>
         <a href="{{ route('contacto') }}">Contacto</a>
         <a href="contacto">Contacto</a>
+        @guest
         <a href="{{ route('login') }}">Login</a>
+        @endguest
+        @auth
+            <a href="{{ route('perfil') }}">Perfil</a>
+        @endauth
     </nav>
 
     <section class="form-cont">

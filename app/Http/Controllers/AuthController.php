@@ -22,7 +22,7 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('inicio');
+        return redirect()->route('index');
     }
 
 
@@ -39,12 +39,14 @@ public function registrarUsuario(Request $request)
     ]);
 
     Usuario::create([
+        'tipo' => 'Cliente',
         'nombre' => $request->nombre,
         'email' => $request->email,
         'telefono' => $request->telefono,
-        'password' => Hash::make($request->password), // Se encripta con el mutador
+        'username' => $request->username,
+        'password' => $request->password, // <- SIN Hash::make
     ]);
-
+    
     return redirect()->route('login')->with('success', 'Registro exitoso. Ahora puedes iniciar sesión.');
 }
 
@@ -57,16 +59,23 @@ public function autenticar(Request $request)
 
     $usuario = Usuario::where('email', $request->email)->first();
 
-    if ($usuario && Hash::check($request->password, $usuario->password)) {
-        Auth::login($usuario);
-        $request->session()->regenerate();
-        return redirect()->intended(route('perfil'));
+    if (!$usuario) {
+        return back()->withErrors([
+            'email' => 'No se encontró ningún usuario con este correo electrónico.',
+        ])->withInput();
     }
 
-    return back()->withErrors([
-        'email' => 'Las credenciales no son válidas.',
-    ])->withInput();
+    if (!Hash::check($request->password, $usuario->password)) {
+        return back()->withErrors([
+            'password' => 'La contraseña es incorrecta.',
+        ])->withInput();
+    }
+
+    Auth::login($usuario);
+    $request->session()->regenerate();
+    return redirect()->intended(route('perfil'));
 }
+
 
 
 

@@ -14,36 +14,52 @@
   
 
     <nav class="barra">
-        <a href="inicio">Inicio</a>
-        <a href="propiedades">Propiedades</a>
-        <a href="registrar_propiedad">Registrar Propiedad</a>
-        <a href="contacto">Contacto</a>
-        <a href="registro">Registro</a>
-        <a href="login">Login</a>
-       
+        <a href="{{ route('index') }}">Inicio</a>
+        <a href="{{ route('propiedades') }}">Propiedades</a>
+        <a href="{{ route('propiedades.create') }}">Registrar Propiedad</a>
+        <a href="{{ route('contacto') }}">Contacto</a>
+        <a href="{{ route('logout') }}"
+            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                Cerrar sesión
+            </a>
+        
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+
     </nav>
     <h1>Bienvenido {{ auth()->user()->nombre }}</h1>
-        <a href="{{ route('logout') }}"
-        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            Cerrar sesión
-        </a>
-
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
+        
 
 
     <main>
         <section class="cont-1">
             <h2 class="subtitulo">Mi Perfil</h2>
             <div class="perfil">
-              
-                <p><strong>Nombre:</strong> <span id="nombre"></span></p>
-                <p><strong>Correo:</strong> <span id="correo"></span></p>
-                <p><strong>Teléfono:</strong> <span id="telefono"></span></p>
-                <p><strong>Usuario:</strong> <span id="usuario"></span></p>
-                <p><strong>Tipo de Usuario:</strong> <span id="tipo"></span></p>
-                <button>Editar Perfil</button>
+            @if (session('success'))
+                <p style="color: green;">{{ session('success') }}</p>
+            @endif
+
+            <form method="POST" action="{{ route('perfil.actualizar') }}">
+                @csrf
+                @method('PUT')
+
+                <p><strong>Nombre:</strong> 
+                    <input type="text" name="nombre" value="{{ auth()->user()->nombre }}" required>
+                </p>
+                <p><strong>Correo:</strong> 
+                    <input type="email" value="{{ auth()->user()->email }}" disabled>
+                </p>
+                <p><strong>Teléfono:</strong> 
+                    <input type="text" name="telefono" value="{{ auth()->user()->telefono }}">
+                </p>
+                <p><strong>Usuario:</strong> 
+                    <input type="text" name="username" value="{{ auth()->user()->username }}">
+                </p>
+
+                <button type="submit">Guardar Cambios</button>
+            </form>
+
             </div>
         </section>
 

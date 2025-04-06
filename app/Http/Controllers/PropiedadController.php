@@ -18,8 +18,9 @@ class PropiedadController extends Controller
             }
 
             if ($request->has('ubicacion')) {
-                $query->where('ubicacion', 'LIKE', '%' . $request->ubicacion . '%');
+                $query->where('direccion', 'LIKE', '%' . $request->ubicacion . '%');
             }
+            
 
             // Obtener máximo 5 propiedades
             $propiedades = $query->take(5)->get();
@@ -56,6 +57,22 @@ class PropiedadController extends Controller
     public function show($id)
     {
         $propiedad = Propiedad::with('imagenes')->findOrFail($id);
+
+
+            // Incrementar vistas
+        $propiedad->increment('vistas');
+
+        // Guardar historial si el usuario está logueado
+        if (auth()->check()) {
+            $usuario = auth()->user();
+
+            // Guardar sólo si no ha visto antes hoy (opcional)
+            \DB::table('historial_vistas')->insert([
+                'usuario_id' => $usuario->id,
+                'propiedad_id' => $propiedad->id,
+                'visto_en' => now(),
+            ]);
+        }
         return view('propiedad.detalles', compact('propiedad'));
     }
 
@@ -66,23 +83,54 @@ class PropiedadController extends Controller
         return view('propiedad.listado', compact('propiedades'));
     }
 
- //  Mostrar propiedades con filtros y límite de 10 en vista propiedad/propiedades
- public function listado(Request $request)
+    public function listado(Request $request)
     {
         $query = Propiedad::with('imagenes');
-
-        // Aplicar filtros si existen
-        if ($request->has('tipo') && $request->tipo !== null) {
-            $query->where('tipo', $request->tipo);
+    
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
         }
-
-        if ($request->has('ubicacion') && $request->ubicacion !== null) {
-            $query->where('ubicacion', 'LIKE', '%' . $request->ubicacion . '%');
+    
+        if ($request->filled('ubicacion')) {
+            $query->where('direccion', 'LIKE', '%' . $request->ubicacion . '%');
         }
-
-        // Cargar hasta 10 propiedades
+    
+        if ($request->filled('precio_min')) {
+            $query->where('precio', '>=', $request->precio_min);
+        }
+    
+        if ($request->filled('precio_max')) {
+            $query->where('precio', '<=', $request->precio_max);
+        }
+    
+        if ($request->filled('habitaciones')) {
+            if ($request->habitaciones == '3') {
+                $query->where('habitaciones', '>=', 3);
+            } else {
+                $query->where('habitaciones', $request->habitaciones);
+            }
+        }
+    
         $propiedades = $query->take(10)->get();
-
+    
         return view('propiedad.propiedades', compact('propiedades'));
+    }
+    
+
+
+    public function toggleDestacado($id)
+    {
+        $usuario = Auth::user();
+        $propiedad = Propiedad::findOrFail($id);
+
+        if ($usuario->propiedadesDestacadas()->where('propiedad_id', $id)->exists()) {
+            // Ya está destacado, eliminar
+            $usuario->propiedadesDestacadas()->detach($id);
+        } else {
+            // Agregar a destacados
+            $usuario->propiedadesDestacadas()->attach($id);
+        }
+
+        return back()->with('success', 'Destacado actualizado.');
     }
 }

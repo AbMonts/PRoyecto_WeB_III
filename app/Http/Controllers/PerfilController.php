@@ -11,4 +11,27 @@ class PerfilController extends Controller
         $usuario = Auth::user();
         return view('perfil', compact('usuario'));
     }
+
+    public function actualizar(Request $request)
+{
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'telefono' => 'nullable|string|max:20',
+        'username' => 'required|string|max:255',
+    ]);
+
+    $usuario = auth()->user();
+
+    $usuario->update([
+        'nombre' => $request->nombre,
+        'telefono' => $request->telefono,
+        'username' => $request->username,
+    ]);
+
+    return redirect()->route('perfil')->with('success', 'Perfil actualizado correctamente.');
 }
+
+
+
+}
+

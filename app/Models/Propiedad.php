@@ -29,4 +29,22 @@ class Propiedad extends Model
     {
         return $this->hasMany(Imagen::class, 'propiedad_id');
     }
+
+    public function usuariosQueDestacaron()
+    {
+        return $this->belongsToMany(Usuario::class, 'destacados');
+    }
+
+    public function getTotalDestacadosAttribute()
+{
+    return $this->usuariosQueDestacaron()->count();
+}
+
+
+
+    public function historialVistas()
+    {
+        return $this->hasMany(HistorialVista::class);
+    }
+
 }

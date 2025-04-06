@@ -1,0 +1,23 @@
+arreglar:
+en inicio
+-en inicio solo debe mostrar propiedades mas destacadas
+--que al bsucar sea presiso,en filtros
+
+
+vista, controladorres(propiedades, auth), base de datos, modelos(propiedad), rutas
+
+en propiedades:
+-que al bsucar sea presiso,en filtros.
+- la opcion de registro, login, perfil solo dbe aparecer si esta logeado o no.
+
+en contacto
+
+en registro:
+
+
+que sea capaz de modificar una propiedad(subir imagen)
+
+correo :
+usuario: HoneySunshineCorp
+contrasena: tuContrasennna123
+correo: infoimbobiliariau@gmail.com

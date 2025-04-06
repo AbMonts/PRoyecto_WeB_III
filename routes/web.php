@@ -15,6 +15,10 @@ Route::get('/propiedades/{id}', [PropiedadController::class, 'show'])->name('pro
 Route::get('/propiedades/todas', [PropiedadController::class, 'showAll'])->name('propiedades.showAll');
 Route::get('/propiedades', [PropiedadController::class, 'listado'])->name('propiedades');
 
+Route::post('/propiedades/{id}/destacar', [PropiedadController::class, 'toggleDestacado'])
+    ->middleware('auth')
+    ->name('propiedades.destacar');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/propiedad/registrarPropiedad', [PropiedadController::class, 'create'])->name('propiedades.create');
@@ -23,7 +27,8 @@ Route::middleware('auth')->group(function () {
 
 // Contacto
 Route::get('/contacto', [ContactoController::class, 'index'])->name('contacto');
-Route::post('/contacto', [ContactoController::class, 'send']);
+Route::post('/enviar-mensaje', [ContactoController::class, 'enviar'])->name('enviar.mensaje');
+
 
 // Autenti
 Route::get('/registro', [AuthController::class, 'registro'])->name('registro');
@@ -36,3 +41,4 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Perfil
 Route::get('/perfil', [PerfilController::class, 'show'])->name('perfil')->middleware('auth');
+Route::put('/perfil', [PerfilController::class, 'actualizar'])->name('perfil.actualizar')->middleware('auth');

@@ -1,0 +1,97 @@
+--------iniciar servidor:
+	php artisan serve
+	http://127.0.0.1:8000
+
+
+
+--------------------usuario prueba
+INSERT INTO usuarios (tipo, nombre, email, telefono, username, password)
+VALUES ('Cliente', 'Damian Zavala', 'admzL@gmail.com', '4444444444', 'zavala01', '12345678');
+
+admzL@gmail.com
+zavala01
+12345678
+
+
+Funcinalidades de cada pagina de web (General)
+
+- inicio :
+	1. cargar ciertas propiedades(destacadas).
+	2. Al dar click en una propiedad, permitira mostrar la ventana con la propiedad 
+correspondiente.(detalles).
+	3. Contiene un filtro simple.
+
+-contacto: 
+	1. Permitira mandar un correo desde el formulario.
+	2. Que agrege el mapa desde OpenStreetMap.
+
+- Detalles:
+	1. Muestra todos los datos de una propiedad.
+	2. Muestre su mapa de la propiedad corr
+
+- login:
+	1. Permite iniciar sesion a un usuario registrado.
+	2. manda a la pagina de registro si no esta registrado(registro).
+
+- Perfil:
+	1. Muestra todos los detalles del usuario loggeado.
+	2. Muestra sus propiedades, en caso de que venda.
+	3. Muestra su historial (puede ser de vistas)
+
+- Propiedades: 
+	1. Datos completos (de forma predeterminada 10 propiedades).
+	2. Dirige a la pagina detalles al dar click en dicha propiedad.
+	3. que permita consultas depende del filtro(formulario).
+
+- Registrar_propiedad(ERROR al mostrar la vista):
+	1. Un formulario que permite registrar una propiedad(a clientes y Agentes).
+ 	
+
+
+-------------------------------- Funcionalidad (precisa)-----------------------------------
+
+- inicio :
+	1. Consulta en la base de datos, los mas visitados.
+	2. El filtro hace la consulta con: venta/renta, la ubicacion. (muestra max 10 resultados).
+	3. Redirije a detalles si de selecciona una propiedad.
+
+- contacto:
+	1. Fomrmulario que envia un correo.
+	 
+- Detalles:
+	1. Carga datos de una propiedad.
+
+- login:
+	1. Formulario que permite hacer un registro de un usuario.
+
+- Propiedades:
+	1. Cuenta con un filtro para consultar y cargar (max 10 propiedades)
+	2. Redirige a detalles de  
+
+- Perfil:
+
+
+
+- Registrar_propiedad:
+
+
+
+------------------------------Notas ---------------------------------------------------
+Arreglar:
+- el inicio de sesion, aun falta las funcionalidades de registro de cosas. 
+Falta:
+-solo agentes pueden vender propiedades.
+-Vistas, las veces que acceden a detalles, se suma uno.
+-lo de destacados a las propiedades(opcion parqa destacar).
+- que se guarde una lista de historial, sobre las propiedades que vio el usuario.
+
+
+
+
+
+
+------------------------------- (arreglar/Agregar) ------------------------------------
+-Destacado/Favorito, posibilidad de destacar propiedades. 
+-Tipo de usuario('Cliente', 'Admin', 'Agente').
+- como integrar el mapa OpenStreetMap.
+- En la base de datos que tenga un tipo de dato para que aparezca en un mapa.
