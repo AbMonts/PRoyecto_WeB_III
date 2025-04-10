@@ -66,6 +66,9 @@ VALUES ('Casa', 'Av. Reforma 123', 'Cerca del centro comercial', 'Casa con ampli
 INSERT INTO imagenes (propiedad_id, imagen_url)
 VALUES (1, 'imgs/casa1.jpg');
 
+INSERT INTO imagenes (propiedad_id, imagen_url)
+VALUES (2, 'imgs/casa2.jpg');
+
 ALTER TABLE usuarios
 ADD COLUMN created_at TIMESTAMP null DEFAULT CURRENT_TIMESTAMP,
 ADD COLUMN updated_at TIMESTAMP null DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;

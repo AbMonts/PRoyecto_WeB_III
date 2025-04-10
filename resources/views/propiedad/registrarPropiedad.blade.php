@@ -45,14 +45,14 @@
             @csrf
 
             <div>
-                <label for="tipo">Tipo:</label>
-                <select name="tipo" required>
+                <label for="estado">Estado:</label>
+                <select name="estado" required>
                     <option value="Venta">Venta</option>
                     <option value="Renta">Renta</option>
                 </select>
 
-                <label for="estado">Estado:</label>
-                <select name="estado" required>
+                <label for="tipo">Tipo:</label>
+                <select name="tipo" required>
                     <option value="Casa">Casa</option>
                     <option value="Departamento">Departamento</option>
                     <option value="Local">Local</option>
@@ -63,8 +63,7 @@
                 <input type="checkbox" name="garage" value="1">
             </div>
 
-            <label for="imagenes">Imágenes:</label>
-            <input type="file" name="imagenes[]" multiple accept="image/*">
+            
 
             <input type="text" name="direccion" placeholder="Dirección" required>
             <input type="number" name="precio" placeholder="Precio" step="0.01" required>

@@ -5,6 +5,7 @@ use App\Http\Controllers\PropiedadController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ContactoController;
+use App\Http\Controllers\ImagenController;
 
 
 Route::get('/', [PropiedadController::class, 'index'])->name('index');
@@ -13,7 +14,7 @@ Route::get('/', [PropiedadController::class, 'index'])->name('index');
 // Propiedades
 Route::get('/propiedades/{id}', [PropiedadController::class, 'show'])->name('propiedades.show');
 Route::get('/propiedades/todas', [PropiedadController::class, 'showAll'])->name('propiedades.showAll');
-Route::get('/propiedades', [PropiedadController::class, 'listado'])->name('propiedades');
+Route::get('/propiedades', [PropiedadController::class, 'listado'])->name('propiedades');//muestra todas de acuerdo a los filtros
 
 Route::post('/propiedades/{id}/destacar', [PropiedadController::class, 'toggleDestacado'])
     ->middleware('auth')
@@ -24,6 +25,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/propiedad/registrarPropiedad', [PropiedadController::class, 'create'])->name('propiedades.create');
     Route::post('/propiedades', [PropiedadController::class, 'store'])->name('propiedades.store');
 });
+
+//editar ------ propiedad
+Route::get('/propiedades/{id}/editar', [PropiedadController::class, 'edit'])->name('propiedades.edit')->middleware('auth');
+Route::put('/propiedades/{id}', [PropiedadController::class, 'update'])->name('propiedades.update')->middleware('auth');
+
+//imagenes(crud)
+Route::delete('/imagenes/{id}', [ImagenController::class, 'destroy'])->name('imagenes.destroy');
+Route::put('/imagenes/{id}', [ImagenController::class, 'update'])->name('imagenes.update');
+Route::post('/imagenes', [ImagenController::class, 'store'])->name('imagenes.store');
+
 
 // Contacto
 Route::get('/contacto', [ContactoController::class, 'index'])->name('contacto');

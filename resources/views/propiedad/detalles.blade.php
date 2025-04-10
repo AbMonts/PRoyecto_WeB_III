@@ -48,9 +48,10 @@
                 <p><strong>Estado:</strong> {{ $propiedad->estado }}</p>
                 <p><strong>Cochera:</strong> {{ $propiedad->garage ? 'Sí' : 'No' }}</p>
                 <p><strong>Vistas:</strong> {{ $propiedad->vistas }}</p>
-                <p><strong>Destacada por:</strong> {{ $propiedad->total_destacados }} usuarios</p>
+                <p><strong>Destacada por:</strong> {{ $propiedad->destacadaPor()->count() }} usuarios</p>
 
-                <button href="{{ route('contacto') }}">Pide mas informacion</a></button>
+
+                <a href="{{ route('contacto') }}" class="btn-contacto">Pide más información</a>
                 <form action="{{ route('propiedades.destacar', $propiedad->id) }}" method="POST">
                     @csrf
                     <button type="submit">
@@ -75,9 +76,26 @@
     </section>
 
     <section class="cont">
-        <h2 class="subtitulo">Calculadora</h2>
-        <!-- Aquí podrías implementar una calculadora de precios si lo deseas -->
+        <h2 class="subtitulo">Calculadora de Hipoteca</h2>
+        <form id="hipotecaForm">
+            <label for="precio">Precio de la propiedad:</label>
+            <input type="number" id="precio" value="{{ $propiedad->precio }}" readonly>
+
+            <label for="enganche">Enganche (en %):</label>
+            <input type="number" id="enganche" value="20" min="0" max="100">
+
+            <label for="interes">Tasa de interés anual (%):</label>
+            <input type="number" id="interes" value="8.5" step="0.1" min="0">
+
+            <label for="plazo">Plazo (años):</label>
+            <input type="number" id="plazo" value="20" min="1" max="30">
+
+            <button type="button" onclick="calcularHipoteca()">Calcular</button>
+        </form>
+
+        <div id="resultadoHipoteca" style="margin-top: 1rem; font-weight: bold;"></div>
     </section>
+
 
     <footer class="pie">
         <p class="grande">Creado por Honey y Sunshine</p>
@@ -90,6 +108,52 @@
             <div class="cont"></div>
         </section>
     </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        function calcularHipoteca() {
+            const precio = parseFloat(document.getElementById('precio').value);
+            const enganchePorcentaje = parseFloat(document.getElementById('enganche').value);
+            const interesAnual = parseFloat(document.getElementById('interes').value) / 100;
+            const plazoAnios = parseInt(document.getElementById('plazo').value);
+
+            const enganche = precio * (enganchePorcentaje / 100);
+            const montoPrestamo = precio - enganche;
+            const interesMensual = interesAnual / 12;
+            const totalPagos = plazoAnios * 12;
+
+            const pagoMensual = montoPrestamo * interesMensual / (1 - Math.pow(1 + interesMensual, -totalPagos));
+
+            const resultado = document.getElementById('resultadoHipoteca');
+            resultado.innerHTML = isFinite(pagoMensual)
+                ? `Pago mensual estimado: <strong>$${pagoMensual.toFixed(2)}</strong>`
+                : `Por favor verifica los valores ingresados.`;
+        }
+</script>
 
 </body>
 </html>

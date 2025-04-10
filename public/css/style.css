@@ -246,6 +246,10 @@ main{
         align-items: center;
 }
 
+.cont-edit{
+    display: grid;
+    grid-template-rows: auto;
+}
 @media (max-width: 768px) {
     .cont {
         flex-direction: column;
@@ -448,7 +452,11 @@ main{
     height: auto;
 }
 
-
+.btn-contacto{
+    color: white;
+    background-color: #333333;
+    align-items: center;
+}
 .cont {
     width: 60rem;
     text-align: center;
@@ -480,4 +488,17 @@ main{
     .pie {
         padding: 1.5rem;
     }
+}
+
+#hipotecaForm {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    gap: 0.5rem;
+}
+
+#hipotecaForm input,
+#hipotecaForm button {
+    padding: 0.5rem;
+    font-size: 1rem;
 }

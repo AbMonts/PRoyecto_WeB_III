@@ -8,12 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Propiedad extends Model
 {
     use HasFactory;
+    public $timestamps = false;
 
     protected $table = 'propiedades';
+
     protected $fillable = [
-        'tipo', 'direccion', 'referencias', 'descripcion', 'precio',
-        'habitaciones', 'banos', 'dimensiones', 'estado', 'garage', 'usuario_id'
+        'tipo', 'direccion', 'referencias', 'descripcion',
+        'precio', 'habitaciones', 'banos', 'dimensiones',
+        'estado', 'garage'
     ];
+    
 
     protected $casts = [
         'garage' => 'boolean',
@@ -39,6 +43,11 @@ class Propiedad extends Model
 {
     return $this->usuariosQueDestacaron()->count();
 }
+
+    public function destacadaPor() {
+        return $this->belongsToMany(User::class, 'destacados', 'propiedad_id', 'usuario_id');
+    }
+
 
 
 

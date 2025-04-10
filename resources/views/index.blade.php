@@ -33,13 +33,17 @@
         <section class="cont-1">
             <h2 class="subtitulo">Encuentra tu hogar ideal</h2>
             <form class="filtros" action="{{ route('index') }}" method="GET">
-            <select name="tipo">
-                    <option value="venta">Venta</option>
-                    <option value="renta">Renta</option>
-                </select>
-                <input type="text" name="ubicacion" placeholder="Ubicación">
+            <select name="estado">
+                <option value="">Todos</option>
+                <option value="Venta" {{ request('estado') == 'Venta' ? 'selected' : '' }}>Venta</option>
+                <option value="Renta" {{ request('estado') == 'Renta' ? 'selected' : '' }}>Renta</option>
+            </select>
+
+                <input type="text" name="ubicacion" placeholder="Ubicación" value="{{ request('ubicacion') }}">
+
                 <button type="submit">Buscar</button>
             </form>
+
         </section>
 
     <section class="cont-2">

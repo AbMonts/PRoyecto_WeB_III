@@ -5,28 +5,45 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Propiedad;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Imagen;
+use Illuminate\Support\Facades\Auth;
+
 
 class PropiedadController extends Controller
 {
+    
     public function index(Request $request)
-        {
-            $query = Propiedad::query();
-
-            // Si hay filtros, aplicarlos
-            if ($request->has('tipo')) {
-                $query->where('tipo', $request->tipo);
-            }
-
-            if ($request->has('ubicacion')) {
-                $query->where('direccion', 'LIKE', '%' . $request->ubicacion . '%');
-            }
-            
-
-            // Obtener máximo 5 propiedades
-            $propiedades = $query->take(5)->get();
-
-            return view('index', compact('propiedades'));
+    {
+        $query = Propiedad::query();
+    
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
         }
+    
+        if ($request->filled('ubicacion')) {
+            $query->where('direccion', 'LIKE', '%' . $request->ubicacion . '%');
+        }
+    
+        $propiedades = $query->take(5)->get();
+    
+        return view('index', compact('propiedades'));
+    }
+    
+
+
+    public function edit($id)
+    {
+        $propiedad = Propiedad::findOrFail($id);
+    
+        // Verifica que la propiedad sea del usuario autenticado
+        if ($propiedad->usuario_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para editar esta propiedad.');
+        }
+    
+        return view('propiedad.edit', compact('propiedad'));
+    }
+    
 
 
     public function create()
@@ -35,26 +52,70 @@ class PropiedadController extends Controller
         return view('propiedad.registrarPropiedad');
     }
 
-  
+
+    public function update(Request $request, $id)
+    {
+        $propiedad = Propiedad::findOrFail($id);
+
+        if ($propiedad->usuario_id !== auth()->id()) {
+            abort(403, 'No puedes editar esta propiedad.');
+        }
+
+        $data = $request->validate([
+            'tipo' => 'required',
+            'direccion' => 'required',
+            'referencias' => 'nullable',
+            'descripcion' => 'required',
+            'precio' => 'required|numeric',
+            'habitaciones' => 'nullable|integer',
+            'banos' => 'nullable|integer',
+            'dimensiones' => 'required|numeric',
+            'estado' => 'required',
+            'garage' => 'required|boolean',
+            'imagenes.*' => 'nullable|image|max:2048' // Máximo 2MB por imagen
+        ]);
+
+        $propiedad->update($data);
+
+        // Agregar nuevas imágenes si existen
+        if ($request->hasFile('imagenes')) {
+            foreach ($request->file('imagenes') as $imagen) {
+                $path = $imagen->store('imagenes', 'public');
+                Imagen::create([
+                    'propiedad_id' => $propiedad->id,
+                    'imagen_url' => 'storage/' . $path,
+                ]);
+            }
+        }
+
+        return redirect()->route('propiedades')->with('success', 'Propiedad actualizada correctamente.');
+    }
+
+
 
     public function store(Request $request)
     {
         $request->validate([
             'tipo' => 'required',
             'direccion' => 'required',
-            'descripcion' => 'required',
+            'referencias' => 'nullable|string',
+            'descripcion' => 'required|string',
             'precio' => 'required|numeric',
+            'habitaciones' => 'nullable|integer',
+            'banos' => 'nullable|integer',
+            'dimensiones' => 'required|numeric',
             'estado' => 'required',
             'garage' => 'required|boolean',
             'usuario_id' => 'required|exists:usuarios,id'
         ]);
+        
 
         Propiedad::create($request->all());
 
         return redirect()->route('propiedades')->with('success', 'Propiedad registrada correctamente');
     }
 
-    public function show($id)
+    public function show($id) //para una propiedad
     {
         $propiedad = Propiedad::with('imagenes')->findOrFail($id);
 

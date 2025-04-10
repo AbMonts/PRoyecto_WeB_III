@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mi perfil</title>
     <link rel="stylesheet" href="../css/normalize.css">
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-
-
-        <h1>Perfil</h1>
-  
+<div class="titulo">
+        <h1 >Perfil</h1>
+    </div>
 
     <nav class="barra">
         <a href="{{ route('index') }}">Inicio</a>
@@ -63,47 +62,60 @@
             </div>
         </section>
 
+                <!-- Mi actividad (historial de vistas) -->
         <section class="cont-2">
-            <h2 class="subtitulo">Mi actividad</h2>
+            <h2 class="subtitulo">Mi Historial de Vistas</h2>
             <div class="propiedades">
-                <div class="propiedad">
-                    <img src="../imgs/casa3.jpg" alt="Casa en CDMX">
-                    <h3>Casa en CDMX</h3>
-                    <p>Precio: $2,500,000</p>
-                    <p>Ubicación: Ciudad de México</p>
-                    <a href="https://maps.app.goo.gl/gK8EUkmidGKGGDzd9">Ver más</a>
-                </div>
-    
-                <div class="propiedad">
-                    <img src="../imgs/casa1.jpg" alt="Departamento en Monterrey">
-                    <h3>Departamento en Monterrey</h3>
-                    <p>Precio: $1,800,000</p>
-                    <p>Ubicación: Monterrey</p>
-                    <a href="propiedad.html?id=2">Ver más</a>
-                </div>
+                @forelse ($historial as $item)
+                    <div class="propiedad">
+                        <img src="{{ $item->propiedad->imagen_url ?? '../imgs/default.jpg' }}" alt="{{ $item->propiedad->tipo }}">
+                        <h3>{{ $item->propiedad->tipo }}</h3>
+                        <p>Precio: ${{ number_format($item->propiedad->precio) }}</p>
+                        <p>Ubicación: {{ $item->propiedad->direccion }}</p>
+                        <a href="{{ route('propiedades.show', $item->propiedad->id) }}">Ver más</a>
+                    </div>
+                @empty
+                    <p>No hay historial de vistas.</p>
+                @endforelse
             </div>
         </section>
 
+        <!-- Mis propiedades -->
         <section class="cont-2">
             <h2 class="subtitulo">Mis Propiedades</h2>
             <div class="propiedades">
-                <div class="propiedad">
-                    <img src="../imgs/casa3.jpg" alt="Casa en CDMX">
-                    <h3>Casa en CDMX</h3>
-                    <p>Precio: $2,500,000</p>
-                    <p>Ubicación: Ciudad de México</p>
-                    <a href="https://maps.app.goo.gl/gK8EUkmidGKGGDzd9">Ver más</a>
-                </div>
-    
-                <div class="propiedad">
-                    <img src="../imgs/casa1.jpg" alt="Departamento en Monterrey">
-                    <h3>Departamento en Monterrey</h3>
-                    <p>Precio: $1,800,000</p>
-                    <p>Ubicación: Monterrey</p>
-                    <a href="propiedad.html?id=2">Ver más</a>
-                </div>
+                @forelse ($misPropiedades as $prop)
+                    <div class="propiedad">
+                        <img src="{{ $prop->imagen_url ?? '../imgs/default.jpg' }}" alt="{{ $prop->tipo }}">
+                        <h3>{{ $prop->tipo }}</h3>
+                        <p>Precio: ${{ number_format($prop->precio) }}</p>
+                        <p>Ubicación: {{ $prop->direccion }}</p>
+                        <a href="{{ route('propiedades.edit', $prop->id) }}">Editar</a>
+                    </div>
+                @empty
+                    <p>No has registrado propiedades.</p>
+                @endforelse
             </div>
         </section>
+
+        <!-- Mis propiedades destacadas -->
+        <section class="cont-2">
+            <h2 class="subtitulo">Propiedades Destacadas</h2>
+            <div class="propiedades">
+                @forelse ($destacados as $dest)
+                    <div class="propiedad">
+                        <img src="{{ $dest->propiedad->imagen_url ?? '../imgs/default.jpg' }}" alt="{{ $dest->propiedad->tipo }}">
+                        <h3>{{ $dest->propiedad->tipo }}</h3>
+                        <p>Precio: ${{ number_format($dest->propiedad->precio) }}</p>
+                        <p>Ubicación: {{ $dest->propiedad->direccion }}</p>
+                        <a href="{{ route('propiedades.show', $dest->propiedad->id) }}">Ver más</a>
+                    </div>
+                @empty
+                    <p>No tienes propiedades destacadas.</p>
+                @endforelse
+            </div>
+        </section>
+
 
     </main>
 
