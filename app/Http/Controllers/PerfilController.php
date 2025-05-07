@@ -33,23 +33,23 @@ class PerfilController extends Controller
     }
 
     public function actualizar(Request $request)
-{
-    $request->validate([
-        'nombre' => 'required|string|max:255',
-        'telefono' => 'nullable|string|max:20',
-        'username' => 'required|string|max:255',
-    ]);
+        {
+            $request->validate([
+                'nombre' => 'required|string|max:255',
+                'telefono' => 'nullable|string|max:20',
+                'username' => 'required|string|max:255',
+            ]);
 
-    $usuario = auth()->user();
+            $usuario = auth()->user();
 
-    $usuario->update([
-        'nombre' => $request->nombre,
-        'telefono' => $request->telefono,
-        'username' => $request->username,
-    ]);
+            $usuario->update([
+                'nombre' => $request->nombre,
+                'telefono' => $request->telefono,
+                'username' => $request->username,
+            ]);
 
-    return redirect()->route('perfil')->with('success', 'Perfil actualizado correctamente.');
-}
+            return redirect()->route('perfil')->with('success', 'Perfil actualizado correctamente.');
+        }
 
 
 

@@ -46,20 +46,24 @@
                 <p><strong>Baños:</strong> {{ $propiedad->banos }}</p>
                 <p><strong>Dimensiones:</strong> {{ $propiedad->dimensiones }} m²</p>
                 <p><strong>Estado:</strong> {{ $propiedad->estado }}</p>
+                <p><strong>Estado actual:</strong> {{ $propiedad->estado_actual }}</p>
                 <p><strong>Cochera:</strong> {{ $propiedad->garage ? 'Sí' : 'No' }}</p>
                 <p><strong>Vistas:</strong> {{ $propiedad->vistas }}</p>
                 <p><strong>Destacada por:</strong> {{ $propiedad->destacadaPor()->count() }} usuarios</p>
 
 
-                <a href="{{ route('contacto') }}" class="btn-contacto">Pide más información</a>
+                <a href="{{ route('contacto', ['propiedad' => $propiedad->id]) }}" class="btn-contacto">Pide más información</a>
+                
+
                 <form action="{{ route('propiedades.destacar', $propiedad->id) }}" method="POST">
                     @csrf
                     <button type="submit">
-                        @if(auth()->user() && auth()->user()->propiedadesDestacadas->contains($propiedad->id))
-                            💔 Quitar de destacados
-                        @else
-                            ⭐ Marcar como destacado
-                        @endif
+                    @if(auth()->check() && auth()->user()->propiedadesDestacadas->contains($propiedad->id))
+                        💔 Quitar de destacados
+                    @else
+                        ⭐ Marcar como destacado
+                    @endif
+
                     </button>
                 </form>
 
@@ -71,11 +75,25 @@
         <h2 class="subtitulo">Fotos de la propiedad</h2>
         <!-- Mostrar las imágenes de la propiedad -->
         @foreach($propiedad->imagenes as $imagen)
-            <img src="{{ asset($imagen->imagen_url) }}" alt="Imagen de la propiedad">
+        <img src="{{ asset($imagen->imagen_url) }}" alt="Imagen de la propiedad">
         @endforeach
     </section>
 
-    <section class="cont">
+    <section class="propiedad">
+
+        @if($propiedad->agente_id)
+            <form method="POST" action="{{ route('cliente.enviarSolicitud') }}">
+                @csrf
+                <input type="hidden" name="agente_id" value="{{ $propiedad->agente_id }}">
+                <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
+                <button type="submit">Solicitar información al agente</button>
+            </form>
+            @else
+            <p>No hay un agente asignado a esta propiedad.</p>
+            @endif
+
+    </section>
+    <section class="propiedad">
         <h2 class="subtitulo">Calculadora de Hipoteca</h2>
         <form id="hipotecaForm">
             <label for="precio">Precio de la propiedad:</label>

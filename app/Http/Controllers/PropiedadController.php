@@ -8,12 +8,15 @@ use App\Models\Propiedad;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Imagen;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Usuario;
+use App\Models\SolicitudClienteAgente;
+
 
 
 class PropiedadController extends Controller
 {
     
-    public function index(Request $request)
+    public function index(Request $request)//busca en index y muestra resultados en index
     {
         $query = Propiedad::query();
     
@@ -36,13 +39,32 @@ class PropiedadController extends Controller
     {
         $propiedad = Propiedad::findOrFail($id);
     
+        $agentes = Usuario::where('tipo', 'Agente')->where('disponible', true)->get();
+
         // Verifica que la propiedad sea del usuario autenticado
         if ($propiedad->usuario_id !== auth()->id()) {
             abort(403, 'No tienes permiso para editar esta propiedad.');
         }
     
-        return view('propiedad.edit', compact('propiedad'));
-    }
+        // Buscar si ya hay una solicitud activa del cliente actual para esta propiedad
+        $clienteId = auth()->id();
+    
+        $tieneSolicitudActiva = SolicitudClienteAgente::where('cliente_id', $clienteId)
+            ->where('propiedad_id', $id)
+            ->where('estado', 'pendiente') // o 'activo', según tu lógica
+            ->exists();
+    
+         // Obtener mensajes relacionados con la propiedad
+        $mensajes = \App\Models\MensajeInteraccion::where('propiedad_id', $id)
+        ->where(function ($query) {
+            $query->where('emisor_id', auth()->id())
+                ->orWhere('receptor_id', auth()->id());
+        })
+        ->orderBy('enviado_en', 'asc')
+        ->get();
+
+        return view('propiedad.edit', compact('propiedad', 'agentes', 'mensajes'));
+}
     
 
 
@@ -72,7 +94,8 @@ class PropiedadController extends Controller
             'dimensiones' => 'required|numeric',
             'estado' => 'required',
             'garage' => 'required|boolean',
-            'imagenes.*' => 'nullable|image|max:2048' // Máximo 2MB por imagen
+            'imagenes' => 'nullable|array',
+            'imagenes.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $propiedad->update($data);
@@ -105,15 +128,46 @@ class PropiedadController extends Controller
             'banos' => 'nullable|integer',
             'dimensiones' => 'required|numeric',
             'estado' => 'required',
-            'garage' => 'required|boolean',
+            'garage' => 'nullable|boolean',
             'usuario_id' => 'required|exists:usuarios,id'
         ]);
         
 
-        Propiedad::create($request->all());
+        $propiedad = Propiedad::create($request->all());
+
+        // luego subes imágenes si las hay
+        if ($request->hasFile('imagenes')) {
+            foreach ($request->file('imagenes') as $imagen) {
+                $path = $imagen->store('imagenes', 'public');
+                Imagen::create([
+                    'propiedad_id' => $propiedad->id,
+                    'imagen_url' => 'storage/' . $path,
+                ]);
+            }
+        }
+
 
         return redirect()->route('propiedades')->with('success', 'Propiedad registrada correctamente');
     }
+
+
+
+    public function destroy($id)
+    {
+        $propiedad = Propiedad::findOrFail($id);
+
+        // Elimina imágenes relacionadas si es necesario
+        foreach ($propiedad->imagenes as $imagen) {
+            // Puedes borrar también el archivo físico si está en el disco
+            Storage::delete($imagen->imagen_url); // si usas Storage
+            $imagen->delete();
+        }
+
+        $propiedad->delete();
+
+        return redirect()->route('perfil')->with('success', 'Propiedad eliminada correctamente.');
+    }
+
 
     public function show($id) //para una propiedad
     {

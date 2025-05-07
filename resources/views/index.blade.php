@@ -56,7 +56,7 @@
                     @foreach($propiedades as $propiedad)
                     <div class="propiedad">
                     <img src="{{ asset($propiedad->imagenes->first()->imagen_url ?? 'imgs/default.jpg') }}" alt="{{ $propiedad->descripcion }}">
-                    <h3><strong>{{ $propiedad->descripcion }}</strong></h3>
+                    <h3><p><strong></strong> {{ $propiedad->direccion }}</p></h3>
                         <p><strong>Precio:</strong> ${{ number_format($propiedad->precio, 2) }}</p>
                         <p><strong>Ubicación:</strong> {{ $propiedad->direccion }}</p>
                         <p><strong>Vistas:</strong> {{ $propiedad->vistas }}</p>

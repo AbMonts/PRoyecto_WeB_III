@@ -5,6 +5,8 @@
     <title>Editar Propiedad</title>
     <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/propiedad.css') }}">
 </head>
 <body>
 
@@ -27,8 +29,20 @@
     </nav>
 
     <main class="cont-edit">
+        @if (session('mensaje'))
+            <div>
+                {{ session('mensaje') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div>
+                {{ session('error') }}
+            </div>
+        @endif
+
         <section class="cont-1">
-            <h2 class="subtitulo">Edita tu propiedad</h2>
+            <h2 class="subtitulo">Administra tu propiedad</h2>
             <form class="formulario" action="{{ route('propiedades.update', $propiedad->id) }}" method="POST">
                 @csrf
                 @method('PUT')
@@ -39,6 +53,8 @@
                         <option value="{{ $tipo }}" {{ $propiedad->tipo == $tipo ? 'selected' : '' }}>{{ $tipo }}</option>
                     @endforeach
                 </select>
+
+                <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
 
                 <label>Dirección:</label>
                 <input type="text" name="direccion" value="{{ $propiedad->direccion }}" required>
@@ -74,7 +90,16 @@
                 </select>
 
                 <button type="submit">Guardar cambios</button>
+                <!-- Botón para eliminar propiedad -->
+                
             </form>
+
+                <form action="{{ route('propiedades.destroy', $propiedad->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta propiedad? Esta acción no se puede deshacer.');" style="margin-top: 1rem;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" style="background-color: red; color: white; padding: 0.5rem 1rem; border: none; border-radius: 5px;">Eliminar Propiedad</button>
+                </form>
+
         </section>
 
         <section class="cont-2">
@@ -110,6 +135,78 @@
                 <button type="submit">Subir Imágenes</button>
             </form>
         </section>
+
+
+        <section class="cont-1">
+            <h2>Solicitar Representación a un Agente</h2>
+
+            @foreach ($agentes as $agente)
+                <div class="agente-card">
+                    <p><strong>{{ $agente->nombre }}</strong> ({{ $agente->email }})</p>
+
+                    @php
+                        // Verificar si ya existe una solicitud para este agente y propiedad
+                        $solicitud = \App\Models\SolicitudClienteAgente::where([
+                            ['cliente_id', Auth::id()],
+                            ['agente_id', $agente->id],
+                            ['propiedad_id', $propiedad->id]
+                        ])->first();
+                    @endphp
+
+                    @if ($solicitud)
+                        <!-- Si la solicitud existe, muestra su estado -->
+                        <p>Estado de la solicitud: {{ $solicitud->estado }}</p>
+                        @if ($solicitud->estado == 'pendiente')
+                            <button disabled>Ya has enviado una solicitud</button>
+                        @elseif ($solicitud->estado == 'aprobada')
+                            <button disabled>Solicitud aprobada</button>
+                        @elseif ($solicitud->estado == 'rechazada')
+                            <button disabled>Solicitud rechazada</button>
+                        @endif
+                    @else
+                        <!-- Si no hay solicitud, permite enviar una nueva -->
+                        <form action="{{ route('solicitar.agente') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="agente_id" value="{{ $agente->id }}">
+                            <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
+
+                            <!-- Campo para tipo de representación (Venta o Renta) -->
+                            <label for="tipo_representacion">Tipo de representación:</label>
+                            <select name="tipo_representacion" required>
+                                <option value="Venta">Venta</option>
+                                <option value="Renta">Renta</option>
+                            </select>
+
+                            <button type="submit">Enviar solicitud</button>
+                        </form>
+                    @endif
+                </div>
+            @endforeach
+        </section>
+        <section class="chat-box">
+            <h2>Chat con el agente</h2>
+            <div class="chat-messages">
+                @foreach($mensajes as $mensaje)
+                    <div>
+                        <strong>{{ $mensaje->emisor->nombre }}:</strong> {{-- Mostrar nombre del emisor --}}
+                        <p>{{ $mensaje->mensaje }}</p>
+                        <small>{{ $mensaje->enviado_en->format('d/m/Y H:i') }}</small>
+                    </div>
+                @endforeach
+
+            </div>
+
+            <form action="{{ route('agente.enviarMensaje') }}" method="POST">
+                @csrf
+                <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
+                <textarea name="contenido" required></textarea>
+                <button type="submit">Enviar mensaje</button>
+            </form>
+
+        </section>
+
+
+
     </main>
 
     <footer class="pie">

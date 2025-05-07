@@ -37,12 +37,22 @@
             </div>
         @endif
 
+        @php
+            $mensajePredeterminado = '';
+            if (isset($propiedad)) {
+                $prop = App\Models\Propiedad::find($propiedad);
+                if ($prop) {
+                    $mensajePredeterminado = "Hola, estoy interesado en la propiedad '{$prop->tipo}' ubicada en '{$prop->direccion}'. ¿Podría darme más información?";
+                }
+            }
+        @endphp
+
         <form action="{{ route('enviar.mensaje') }}" method="POST" class="formulario">
             @csrf
             <input type="text" name="nombre" placeholder="Tu nombre" required>
             <input type="email" name="email" placeholder="Tu correo" required>
             <input type="tel" name="telefono" placeholder="Tu teléfono (opcional)">
-            <textarea name="mensaje" placeholder="Escribe tu mensaje aquí" required></textarea>
+            <textarea name="mensaje" placeholder="Escribe tu mensaje aquí" required>{{ old('mensaje', $mensajePredeterminado) }}</textarea>
             <button type="submit">Enviar</button>
         </form>
     </section>

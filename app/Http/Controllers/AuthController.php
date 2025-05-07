@@ -27,29 +27,32 @@ class AuthController extends Controller
 
 
     
-
-public function registrarUsuario(Request $request)
-{
-    $request->validate([
-        'nombre' => 'required|string|max:255',
-        'email' => 'required|email|unique:usuarios,email',
-        'password' => 'required|min:6',
-        'confirmar_password' => 'required|same:password',
-        'telefono' => 'nullable|string|max:20',
-    ]);
-
-    Usuario::create([
-        'tipo' => 'Cliente',
-        'nombre' => $request->nombre,
-        'email' => $request->email,
-        'telefono' => $request->telefono,
-        'username' => $request->username,
-        'password' => $request->password, // <- SIN Hash::make
-    ]);
+    public function registrarUsuario(Request $request)
+    {
+        $request->validate([
+            'nombre' => 'required|string|max:100',
+            'email' => 'required|email|unique:usuarios,email',
+            'password' => 'required|min:6',
+            'confirmar_password' => 'required|same:password',
+            'telefono' => 'required|string|max:10',
+        ]);
     
-    return redirect()->route('login')->with('success', 'Registro exitoso. Ahora puedes iniciar sesión.');
-}
+        Usuario::create([
+            'tipo' => 'Cliente', // 🔒 Se fuerza a cliente
+            'nombre' => $request->nombre,
+            'email' => $request->email,
+            'telefono' => $request->telefono,
+            'username' => $request->email, // puedes dejarlo igual al correo o generar uno
+            'password' => $request->password
+        ]);
+    
+        return redirect()->route('login')->with('success', 'Registro exitoso. Ahora puedes iniciar sesión.');
+    }
+    
 
+
+
+// iniciar secion
 public function autenticar(Request $request)
 {
     $credentials = $request->validate([

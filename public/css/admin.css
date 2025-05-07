@@ -1,0 +1,171 @@
+/* admin.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn {
+    margin-top: 1.5rem;
+    padding: 6px 12px;
+    margin-left: 6rem;
+    background-color: #3490dc;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.btn-danger {
+    background-color: #e3342f;
+}
+
+.containerlogin {
+    width: 35%;
+    height: 7rem;
+    margin: 40px auto;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #ccc;
+}
+
+.containerloginagente {
+    width: 20%;
+    margin: 40px auto;
+    background-color: rgb(235, 246, 251);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #ccc;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 45%;
+    padding: 8px;
+    margin-left: auto;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button[type="submit"] {
+    background-color: #3490dc;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #2779bd;
+}
+
+.alert {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.chat-box {
+    background: #f9f9f9;
+    border: 1px solid #6a6a6a;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 30px;
+    max-width: 600px;
+}
+
+.chat-messages {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.mensaje {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 80%;
+    position: relative;
+    clear: both;
+}
+
+.mensaje.cliente {
+    background-color: #e1f5fe;
+    align-self: flex-end;
+    float: right;
+    text-align: right;
+}
+
+.mensaje.agente {
+    background-color: #c8e6c9;
+    align-self: flex-start;
+    float: left;
+}
+
+.hora {
+    display: block;
+    font-size: 0.75em;
+    color: #666;
+    margin-top: 5px;
+}
+
+.chat-box textarea {
+    width: 100%;
+    min-height: 50px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+
+.chat-box form{ 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    
+
+}
+.chat-box button {
+    padding: 8px 16px;
+    background-color: #4289cf;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 1rem;
+    width: 10rem;
+    height: 2rem;
+}

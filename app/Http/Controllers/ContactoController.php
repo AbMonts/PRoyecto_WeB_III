@@ -9,10 +9,12 @@ use App\Mail\MensajeContacto;
 
 class ContactoController extends Controller
 {
-    public function index()
-    {
-        return view('contacto');
-    }
+    public function index(Request $request)
+{
+    $propiedad = $request->input('propiedad');
+    return view('contacto', compact('propiedad'));
+}
+
 
     public function enviar(Request $request)
     {

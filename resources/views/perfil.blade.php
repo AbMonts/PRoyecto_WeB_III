@@ -83,6 +83,18 @@
         <!-- Mis propiedades -->
         <section class="cont-2">
             <h2 class="subtitulo">Mis Propiedades</h2>
+
+            {{-- Mensaje de éxito al eliminar propiedad --}}
+            @if (session('success'))
+                <div class="mensaje-exito">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+              <!-- Botón para agregar nueva propiedad -->
+            <div style="margin-bottom: 1rem;">
+                <a href="{{ route('propiedades.create') }}" class="btn-agregar-propiedad" style="padding: 10px 20px; background-color: #007BFF; color: white; border-radius: 5px; text-decoration: none;">+ Agregar Propiedad</a>
+            </div>
             <div class="propiedades">
                 @forelse ($misPropiedades as $prop)
                     <div class="propiedad">
@@ -132,5 +144,24 @@
 
     </footer>
     
+    <style>
+        .mensaje-exito {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: sans-serif;
+        }
+    </style>
+
+    <script>
+        setTimeout(() => {
+            const mensaje = document.querySelector('.mensaje-exito');
+            if (mensaje) mensaje.style.display = 'none';
+        }, 4000); // 4 segundos
+    </script>
+
 </body>
 </html>
