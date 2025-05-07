@@ -13,6 +13,7 @@ use App\Http\Controllers\AgenteController;
 use App\Http\Controllers\SolicitudAgenteController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgenteAuthController;
+use App\Http\Controllers\MensajeInteraccionController;
 
 Route::get('/', [PropiedadController::class, 'index'])->name('index');
 
@@ -128,3 +129,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
         return redirect()->route('admin.login');
     })->name('logout');
 });
+
+
+//mensajes directos
+Route::post('/mensajes', [MensajeInteraccionController::class, 'store'])->name('mensajes.store');

@@ -330,7 +330,7 @@ public function guardarInfoCliente(Request $request, $propiedadId)
         'contenido' => 'required|string|max:1000',
     ]);
 
-    Mensaje::create([
+    MensajeInteraccion::create([
         'emisor_id' => Auth::id(),
         'propiedad_id' => $request->propiedad_id,
         'contenido' => $request->contenido,

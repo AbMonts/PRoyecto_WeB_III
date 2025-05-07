@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Mensaje;
+use App\Models\MensajeInteraccion;
+
 use Illuminate\Support\Facades\Auth;
 
 class MensajeInteraccionController extends Controller

@@ -43,7 +43,7 @@
 
         <section class="cont-1">
             <h2 class="subtitulo">Administra tu propiedad</h2>
-            <form class="formulario" action="{{ route('propiedades.update', $propiedad->id) }}" method="POST">
+            <form class="formularioEdit" action="{{ route('propiedades.update', $propiedad->id) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -183,25 +183,43 @@
                 </div>
             @endforeach
         </section>
-        <section class="chat-box">
-            <h2>Chat con el agente</h2>
-            <div class="chat-messages">
-                @foreach($mensajes as $mensaje)
-                    <div>
-                        <strong>{{ $mensaje->emisor->nombre }}:</strong> {{-- Mostrar nombre del emisor --}}
-                        <p>{{ $mensaje->mensaje }}</p>
-                        <small>{{ $mensaje->enviado_en->format('d/m/Y H:i') }}</small>
-                    </div>
-                @endforeach
+        <section >
+        <h2>Chat con el agente</h2>
+        <div class="chat-box">
+            @foreach($mensajes as $mensaje)
+                <div class="{{ $mensaje->emisor_id === auth()->id() ? 'text-right' : 'text-left' }}">
+                    <strong>{{ $mensaje->emisor->nombre }}:</strong> {{ $mensaje->mensaje }} <br>
+                    <small>
+                        {{ $mensaje->enviado_en ? $mensaje->enviado_en->format('d/m/Y H:i') : '' }}
+                    </small>
 
-            </div>
+                </div>
+                <hr>
+            @endforeach
+        </div>
 
-            <form action="{{ route('agente.enviarMensaje') }}" method="POST">
-                @csrf
-                <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
-                <textarea name="contenido" required></textarea>
-                <button type="submit">Enviar mensaje</button>
-            </form>
+
+        </div>
+        <form action="{{ route('mensajes.store') }}" method="POST">
+            @csrf
+            <input type="hidden" name="receptor_id" value="{{ $cliente->id }}">
+            <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
+            
+            <textarea name="mensaje" class="form-control" placeholder="Escribe tu mensaje..." required></textarea>
+            <button type="submit" class="btn btn-primary mt-2">Enviar</button>
+        </form>
+
+            <!-- Para aprovar la operacion por el cliente -->
+            @if(!$solicitud->aprobado_por_cliente)
+                <form action="{{ route('cliente.aprobarSolicitud', $solicitud->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de aprobar esta solicitud? Esto permitirá al agente registrar la venta o renta.')">
+                    @csrf
+                    <input type="hidden" name="mensaje" value="El cliente ha aprobado la solicitud.">
+                    <button type="submit" class="btn btn-success">Aprobar Solicitud</button>
+                </form>
+            @else
+                <p style="color: green;"><strong>Solicitud Aprobada</strong></p>
+            @endif
+
 
         </section>
 

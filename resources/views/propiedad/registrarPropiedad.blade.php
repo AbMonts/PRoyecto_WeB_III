@@ -6,6 +6,7 @@
     <title>Registrar Propiedad</title>
     <link rel="stylesheet" href="{{ asset('css/normalize.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/propiedad.css') }}">
 </head>
 <body>
 
@@ -44,7 +45,7 @@
         <form class="formulario" action="{{ route('propiedades.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <div>
+            <div class= "cuadro">
                 <label for="estado">Estado:</label>
                 <select name="estado" required>
                     <option value="Venta">Venta</option>

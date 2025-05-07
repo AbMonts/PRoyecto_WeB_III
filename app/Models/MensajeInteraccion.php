@@ -25,17 +25,17 @@ class MensajeInteraccion extends Model
     ];
 
     public function emisor()
-    {
-        return $this->belongsTo(Usuario::class, 'emisor_id', 'id');
-    }
+{
+    return $this->belongsTo(Usuario::class, 'emisor_id');
+}
 
-    public function receptor()
-    {
-        return $this->belongsTo(Usuario::class, 'receptor_id', 'id'); // <-- corregido
-    }
+public function receptor()
+{
+    return $this->belongsTo(Usuario::class, 'receptor_id');
+}
 
-    public function propiedad()
-    {
-        return $this->belongsTo(Propiedad::class);
-    }
+public function propiedad()
+{
+    return $this->belongsTo(Propiedad::class);
+}
 }

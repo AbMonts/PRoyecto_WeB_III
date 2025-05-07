@@ -6,9 +6,10 @@
     <title>Mi perfil</title>
     <link rel="stylesheet" href="../css/normalize.css">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="{{ asset('css/propiedad.css') }}">
 </head>
 <body>
-<div class="titulo">
+    <div class="titulo">
         <h1 >Perfil</h1>
     </div>
 
@@ -31,7 +32,7 @@
         
 
 
-    <main>
+    <main class= "contPerfil">
         <section class="cont-1">
             <h2 class="subtitulo">Mi Perfil</h2>
             <div class="perfil">
@@ -39,7 +40,7 @@
                 <p style="color: green;">{{ session('success') }}</p>
             @endif
 
-            <form method="POST" action="{{ route('perfil.actualizar') }}">
+            <form class="formPerfil" method="POST" action="{{ route('perfil.actualizar') }}">
                 @csrf
                 @method('PUT')
 
@@ -56,7 +57,11 @@
                     <input type="text" name="username" value="{{ auth()->user()->username }}">
                 </p>
 
+                <div>
                 <button type="submit">Guardar Cambios</button>
+
+                </div>
+               
             </form>
 
             </div>
@@ -81,7 +86,7 @@
         </section>
 
         <!-- Mis propiedades -->
-        <section class="cont-2">
+        <section class="cont-2 perfil">
             <h2 class="subtitulo">Mis Propiedades</h2>
 
             {{-- Mensaje de éxito al eliminar propiedad --}}

@@ -6,6 +6,7 @@
     <title>Inicio</title>
     <link rel="stylesheet" href="../css/normalize.css">
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="{{ asset('css/propiedad.css') }}">
 </head>
 <body>
     <div class="titulo">

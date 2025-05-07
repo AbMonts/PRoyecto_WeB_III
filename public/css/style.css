@@ -61,6 +61,7 @@ p{
     .perfil{
         text-align: justify;
         align-items: start;
+        
     }
 
 }
@@ -143,6 +144,16 @@ header {
     display: flex;
     flex-direction: column;
     align-items:flex-start;
+    align-content: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.formularioEdit{
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start;
+    align-content: center;
     gap: 1rem;
     width: 100%;
 }
@@ -151,27 +162,72 @@ header {
 .formulario textarea,
 .formulario button {
     
-    width: 80%; 
+    width: 90%; 
     padding: 0.8rem;
-    border: 1px solid #ccc;
+    border: 1px solid #663c69;
     border-radius: 5px;
     font-size: 1rem;
+
+    
+}
+
+.formularioEdit input,
+.formularioEdit textarea,
+.formularioEdit button {
+    
+    width: 90%; 
+    padding: 0.8rem;
+    border: 1px solid #663c69;
+    border-radius: 5px;
+    font-size: 1rem;
+
+    
 }
 .formulario textarea {
     min-height: 150px;
 }
+.formularioEdit textarea {
+    min-height: 150px;
+}
+button[type="submit"] {
+    display: block;
+    width: auto;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 1rem;
+    padding-left: auto;
+}
+
 
 .formulario button {
     color: white;
     cursor: pointer;
     font-weight: bold;
     background-color: var(--primario);
+    display: flex;
+    align-self: center;
+   
+}
+.formularioEdit button {
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: var(--primario);
+    display: flex;
+    align-self: center;
+   
 }
 
 .formulario button:hover {
     background-color: var(--azul-morado);
 }
 
+
+.formularioEdit button:hover {
+    background-color: var(--azul-morado);
+}
 
 
 .login-container {
@@ -211,15 +267,37 @@ header {
 
 .formulario div{
     width: 40%;
-    align-self:flex-start;
+    
     display: flex;
     flex-direction: row;
     gap: .5rem;
-    margin-left: 4rem;
+  
 }
 
 
+.perfil{
+    border: black .2rem;
+    border-style: dotted;
+    padding: 2rem;
+}
 
+.formPerfil{
+   
+    margin-left: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    
+}
+
+.formPerfil div{
+   display: flex;
+   flex-direction: column;
+   width: 40%;
+   align-self:flex-start;
+   align-items: center;
+   align-items: center;
+}
 
 
 
@@ -235,6 +313,7 @@ header {
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     justify-content: space-between;
+    margin-bottom: 5rem;
 }
 
 .filtros select,
