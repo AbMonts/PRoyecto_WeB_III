@@ -80,8 +80,8 @@
         @endforeach
     </section>
 
-    <section class="propiedad">
-
+    <section class="cont-1">
+    <div class="propiedad">
         @if($propiedad->agente_id)
             <form method="POST" action="{{ route('cliente.enviarSolicitud') }}">
                 @csrf
@@ -93,27 +93,33 @@
             <p>No hay un agente asignado a esta propiedad.</p>
             @endif
 
+        </div>
+
     </section>
-    <section class="propiedad">
-        <h2 class="subtitulo">Calculadora de Hipoteca</h2>
-        <form id="hipotecaForm">
-            <label for="precio">Precio de la propiedad:</label>
-            <input type="number" id="precio" value="{{ $propiedad->precio }}" readonly>
 
-            <label for="enganche">Enganche (en %):</label>
-            <input type="number" id="enganche" value="20" min="0" max="100">
+    <section class="cont-1">
+        <div class="propiedad">
+            <h2 class="subtitulo">Calculadora de Hipoteca</h2>
+            <form id="hipotecaForm">
+                <label for="precio">Precio de la propiedad:</label>
+                <input type="number" id="precio" value="{{ $propiedad->precio }}" readonly>
 
-            <label for="interes">Tasa de interés anual (%):</label>
-            <input type="number" id="interes" value="8.5" step="0.1" min="0">
+                <label for="enganche">Enganche (en %):</label>
+                <input type="number" id="enganche" value="20" min="0" max="100">
 
-            <label for="plazo">Plazo (años):</label>
-            <input type="number" id="plazo" value="20" min="1" max="30">
+                <label for="interes">Tasa de interés anual (%):</label>
+                <input type="number" id="interes" value="8.5" step="0.1" min="0">
 
-            <button type="button" onclick="calcularHipoteca()">Calcular</button>
-        </form>
+                <label for="plazo">Plazo (años):</label>
+                <input type="number" id="plazo" value="20" min="1" max="30">
 
-        <div id="resultadoHipoteca" style="margin-top: 1rem; font-weight: bold;"></div>
+                <button type="button" onclick="calcularHipoteca()">Calcular</button>
+            </form>
+
+            <div id="resultadoHipoteca" style="margin-top: 1rem; font-weight: bold;"></div>
+        </div>
     </section>
+
 
 
     <footer class="pie">

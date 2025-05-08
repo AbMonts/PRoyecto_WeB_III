@@ -30,6 +30,8 @@
         <div>
             <strong>Panel de Admin</strong>
             <a href="{{ route('admin.dashboard') }}" class="btn">Inicio</a>
+            <a href="{{ route('admin.reportes') }}" class="btn">📄 Reportes</a>
+
         </div>
         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
             @csrf

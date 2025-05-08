@@ -1,0 +1,24 @@
+SnappyPDF (wkhtmltopdf) 
+Instalar SnappyPDF
+composer require barryvdh/laravel-snappy
+
+Después, agrega la configuración al archivo config/snappy.php (si no existe, créalo con el siguiente comando):
+php artisan vendor:publish --provider="Barryvdh\Snappy\ServiceProvider"
+
+Configurar SnappyPDF en Laravel
+Abre el archivo config/snappy.php y verifica que la configuración apunte al ejecutable wkhtmltopdf, descárgalo desde:
+	https://wkhtmltopdf.org/downloads.html
+
+Para Laravel, configura el binario correctamente:
+return [
+    'pdf' => [
+        'enabled' => true,
+        'binary' => '/usr/local/bin/wkhtmltopdf', // Cambia la ruta según tu sistema
+        'timeout' => false,
+        'options' => [],
+        'env' => [],
+    ],
+];
+En Windows, la ruta suele ser `C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe.
+
+

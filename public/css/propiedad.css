@@ -27,7 +27,7 @@ main{
 }
 .cont-detalles{
     display: grid;
-    grid-template-rows: 20rem;
+    grid-template-rows: 25rem auto auto auto;
         margin: 5rem;
         align-items: center;
 }

@@ -14,8 +14,18 @@ use App\Http\Controllers\SolicitudAgenteController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgenteAuthController;
 use App\Http\Controllers\MensajeInteraccionController;
+use App\Http\Controllers\ReportePropiedadController;
 
 Route::get('/', [PropiedadController::class, 'index'])->name('index');
+
+
+
+Route::get('/admin/reportes', [ReportePropiedadController::class, 'seleccionar'])->name('admin.reportes');
+
+Route::get('/reporte/seleccionar', [ReportePropiedadController::class, 'seleccionar']);
+Route::get('/reporte/propiedad/{id}', [ReportePropiedadController::class, 'mostrar'])->name('reporte.mostrar');
+Route::get('/reporte/seleccionar', [ReportePropiedadController::class, 'seleccionar'])->name('reporte.seleccionar');
+Route::get('/reporte/pdf/{id}', [ReportePropiedadController::class, 'generarPDF'])->name('reporte.pdf');
 
 
 // Propiedades

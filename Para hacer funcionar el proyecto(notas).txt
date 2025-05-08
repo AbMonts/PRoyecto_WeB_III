@@ -1,0 +1,47 @@
+Para hacer funcionar el proyecto que está en GitHub, se debe:
+
+1. Clonar el repositorio desde GitHub en su computadora con git clone [url-del-repositorio].
+
+2. Entrar a la carpeta del proyecto clonado.
+
+3. Instalar las dependencias PHP con Composer ejecutando composer install. Esto descargará todas las librerías necesarias que no están en el repositorio (normalmente la carpeta vendor/ está en .gitignore y no se sube).
+
+4. Crear una base de datos en su sistema (MySQL, MariaDB, etc.) con el nombre que desee para el proyecto.(esta en el drive)
+
+5. Copiar el archivo .env.example y renombrarlo a .env. Luego editar el archivo .env para configurar los datos de conexión a la base de datos (DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD).(esta en el proyecto laravel)
+
+6. Generar la clave de la aplicación con el comando php artisan key:generate para que Laravel funcione correctamente.
+
+7. Finalmente, iniciar el servidor de desarrollo con php artisan serve para que el proyecto funcione localmente.
+
+
+------------------------------------------------------------------------------
+Si usas Laragon, este ya incluye PHP, MySQL y Composer, por lo que solo necesita clonar el proyecto, instalar dependencias, configurar .env:
+
+
+1. Clonar el proyecto desde GitHuben la carpeta www de Laragon (normalmente C:\laragon\www) usando Git o desde Visual Studio Code.
+
+2. Abrir la terminal integrada de Laragon (desde el menú de Laragon, opción "Terminal") y navegar a la carpeta del proyecto clonado.
+
+3. Instalar las dependencias con Composer** ejecutando:
+   	composer install
+   Esto descargará todas las librerías necesarias que no están en el repositorio.
+
+4. Crear el archivo .env copiando .env.example y ajustando los datos de conexión a la base de datos (nombre, usuario, contraseña) según la configuración local.
+
+5. Generar la clave de la aplicación** con:
+     php artisan key:generate
+ 
+6. Crear la base de datos desde Laragon (usando phpMyAdmin o la consola MySQL) con el nombre que pusiste en .env.
+
+7. Si usas migraciones, ejecutar(te recomiendo que esto no lo hagas):
+
+   php artisan migrate
+(Si no usas migraciones, la base de datos debe estar creada y con la estructura correcta manualmente).
+
+8. Reiniciar los servicios de Laragon (detener y volver a iniciar Apache/Nginx y MySQL) para refrescar el servidor y las URLs amigables.
+
+9. Abrir el proyecto, en la carpeta laragon/www/nombre del proyecto...abres la terminal y inicias el servidor al escribir:
+	php artisan serve
+	http://127.0.0.1:8000
+

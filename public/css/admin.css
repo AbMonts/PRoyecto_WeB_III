@@ -1,4 +1,4 @@
-/* admin.css */
+/* ------------------ admin.css y agente -------------------------------------------*/
 
 body {
     font-family: Arial, sans-serif;
@@ -41,6 +41,9 @@ body {
     border-radius: 10px;
     box-shadow: 0px 0px 10px #ccc;
 }
+
+
+
 
 .containerloginagente {
     width: 20%;
