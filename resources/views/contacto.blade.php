@@ -18,7 +18,7 @@
     <nav class="barra">
         <a href="{{ route('index') }}">Inicio</a>
         <a href="{{ route('propiedades') }}">Propiedades</a>
-        <a href="{{ route('propiedades.create') }}">Registrar Propiedad</a>
+        <a href="{{ route('solicitud.create') }}">Registrar Propiedad</a>
         @guest
         <a href="{{ route('registro') }}">Registro</a>
         <a href="{{ route('login') }}">Login</a>

@@ -105,6 +105,10 @@ public function solicitudesClienteAgente()
         return $this->hasMany(MensajeInteraccion::class, 'receptor_id');
     }
 
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'agente_id');
+    }
 }
 
 

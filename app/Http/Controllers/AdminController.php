@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
+use App\Models\SolicitudPropiedad;
+
 
 
 class AdminController extends Controller
@@ -22,8 +24,9 @@ public function dashboard()
 {
     $subadmins = Usuario::where('tipo', 'Subadmin')->get();
     $agentes = Usuario::where('tipo', 'Agente')->get();
+    $clientes = Usuario::where('tipo', 'Cliente')->get();
 
-    return view('admin.dashboard', compact('subadmins', 'agentes'));
+    return view('admin.dashboard', compact('subadmins', 'agentes', 'clientes'));
 }
 
 public function showSubadmin($id)
@@ -35,8 +38,16 @@ public function showSubadmin($id)
 public function showAgente($id)
 {
     $agente = Usuario::where('tipo', 'Agente')->findOrFail($id);
-    return view('admin.usuarios.show', compact('agente'));
+
+    // Obtener propiedades asignadas a este agente
+    $propiedades = $agente->propiedades ?? [];  // relación debe definirse en el modelo
+
+    // Obtener ventas realizadas por este agente
+    $ventas = $agente->ventas ?? [];
+
+    return view('admin.usuarios.show', compact('agente', 'propiedades', 'ventas'));
 }
+
 
 public function updateSubadmin(Request $request, $id)
 {
@@ -143,6 +154,48 @@ public function storeAgente(Request $request)
 
     return redirect()->route('admin.dashboard')->with('success', 'Agente creado correctamente.');
 }
+
+// ----------------------------- solicitud propiedades
+
+
+public function VerSolicitudProp($id)
+{
+    $solicitud = SolicitudPropiedad::with('cliente')->findOrFail($id);
+    return view('admin.solicitudes.show', compact('solicitud'));
+}
+
+
+public function mostrarSolicitudes()
+{
+    $solicitudes = SolicitudPropiedad::with('cliente')->latest()->get();
+    return view('admin.solicitudes.solicitudesProp', compact('solicitudes'));
+}
+
+
+public function aprobar($id)
+{
+    $solicitud = SolicitudPropiedad::findOrFail($id);
+    $solicitud->estado_solicitud = 'Aprobada';
+    $solicitud->editable = false;
+    $solicitud->admin_id = auth()->id();
+    $solicitud->save();
+
+    return redirect()->route('admin.solicitudes.aprobar')->with('success', 'Solicitud aprobada.');
+}
+
+
+public function rechazar(Request $request, $id)
+{
+    $solicitud = SolicitudPropiedad::findOrFail($id);
+    $solicitud->estado_solicitud = 'Rechazada';
+    $solicitud->editable = false;
+    $solicitud->admin_id = auth()->id();
+    $solicitud->mensaje_admin = $request->mensaje_admin ?? 'Rechazada por el administrador';
+    $solicitud->save();
+
+    return redirect()->route('admin.solicitudes.index')->with('success', 'Solicitud rechazada.');
+}
+
 
 
 

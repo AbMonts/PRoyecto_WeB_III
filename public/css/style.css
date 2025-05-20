@@ -452,3 +452,22 @@ button[type="submit"] {
     padding: 0.5rem;
     font-size: 1rem;
 }
+
+/* mensajes */
+ .mensaje-admin {
+        margin-top: 1rem;
+        padding: 10px;
+        background: #f8f9fa;
+        border-left: 5px solid #007BFF;
+        font-family: sans-serif;
+}
+
+ .mensaje-exito {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-family: sans-serif;
+}

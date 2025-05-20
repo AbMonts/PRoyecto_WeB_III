@@ -17,7 +17,7 @@
     <nav class="barra">
         <a href="{{ route('index') }}">Inicio</a>
         <a href="{{ route('propiedades') }}">Propiedades</a>
-        <a href="{{ route('propiedades.create') }}">Crear Propiedad</a>
+        <a href="{{ route('solicitud.create') }}">Crear Propiedad</a>
         <a href="{{ route('contacto') }}">Contacto</a>
         @auth
             <a href="{{ route('perfil') }}">Perfil</a>
@@ -137,10 +137,10 @@
         </section>
 
 
-        <section class="cont-1">
-            <h2>Solicitar Representación a un Agente</h2>
+    <section class="cont-1">
+        <h2>Solicitar Representación a un Agente</h2>
 
-            @foreach ($agentes as $agente)
+        @foreach ($agentes as $agente)
                 <div class="agente-card">
                     <p><strong>{{ $agente->nombre }}</strong> ({{ $agente->email }})</p>
 
@@ -181,50 +181,35 @@
                         </form>
                     @endif
                 </div>
-            @endforeach
-        </section>
-        <section >
-        <h2>Chat con el agente</h2>
-        <div class="chat-box">
-            @foreach($mensajes as $mensaje)
-                <div class="{{ $mensaje->emisor_id === auth()->id() ? 'text-right' : 'text-left' }}">
-                    <strong>{{ $mensaje->emisor->nombre }}:</strong> {{ $mensaje->mensaje }} <br>
-                    <small>
-                        {{ $mensaje->enviado_en ? $mensaje->enviado_en->format('d/m/Y H:i') : '' }}
-                    </small>
+        @endforeach
+    </section>
 
-                </div>
-                <hr>
-            @endforeach
-        </div>
-
-
-        </div>
-        <form action="{{ route('mensajes.store') }}" method="POST">
-            @csrf
-            <input type="hidden" name="receptor_id" value="{{ $cliente->id }}">
-            <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
-            
-            <textarea name="mensaje" class="form-control" placeholder="Escribe tu mensaje..." required></textarea>
-            <button type="submit" class="btn btn-primary mt-2">Enviar</button>
-        </form>
-
-            <!-- Para aprovar la operacion por el cliente -->
-            @if(!$solicitud->aprobado_por_cliente)
-                <form action="{{ route('cliente.aprobarSolicitud', $solicitud->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de aprobar esta solicitud? Esto permitirá al agente registrar la venta o renta.')">
+        <!-- El chat entre cliente y agente   -->
+    @if($solicitudAprobada)
+            <section>
+                <h2>Chat con el agente</h2>
+                <div class="chat-box">
+                    @foreach($mensajes as $mensaje)
+                        <div class="{{ $mensaje->emisor_id === auth()->id() ? 'text-right' : 'text-left' }}">
+                            <strong>{{ $mensaje->emisor->nombre }}:</strong> {{ $mensaje->mensaje }} <br>
+                            <small>{{ $mensaje->enviado_en ? $mensaje->enviado_en->format('d/m/Y H:i') : '' }}</small>
+                        </div>
+                        <hr>
+                    @endforeach
+                    <form action="{{ route('mensajes.store') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="mensaje" value="El cliente ha aprobado la solicitud.">
-                    <button type="submit" class="btn btn-success">Aprobar Solicitud</button>
+                    <input type="hidden" name="receptor_id" value="{{ $solicitudAprobada->agente_id }}">
+                    <input type="hidden" name="propiedad_id" value="{{ $propiedad->id }}">
+
+                    <textarea name="mensaje" class="form-control" placeholder="Escribe tu mensaje..." required></textarea>
+                    <button type="submit" class="btn btn-primary mt-2">Enviar</button>
                 </form>
-            @else
-                <p style="color: green;"><strong>Solicitud Aprobada</strong></p>
-            @endif
+                </div>
 
+            </section>
+    @endif
 
-        </section>
-
-
-
+    <!-- Funcioonalidad para que el cliente autorize vender o rentar una propiedad -->
     </main>
 
     <footer class="pie">

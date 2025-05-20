@@ -15,6 +15,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AgenteAuthController;
 use App\Http\Controllers\MensajeInteraccionController;
 use App\Http\Controllers\ReportePropiedadController;
+use App\Http\Controllers\SolicitudPropiedadController;
 
 Route::get('/', [PropiedadController::class, 'index'])->name('index');
 
@@ -38,9 +39,12 @@ Route::post('/propiedades/{id}/destacar', [PropiedadController::class, 'toggleDe
     ->name('propiedades.destacar');
 
 
+// --------------Usuario 
 Route::middleware('auth')->group(function () {
-    Route::get('/propiedad/registrarPropiedad', [PropiedadController::class, 'create'])->name('propiedades.create');
-    Route::post('/propiedades', [PropiedadController::class, 'store'])->name('propiedades.store');
+    Route::get('/solicitud/{id}/detalle', [SolicitudPropiedadController::class, 'detalle'])->name('solicitud.detalle');
+    Route::get('/solicitud/propiedad', [SolicitudPropiedadController::class, 'create'])->name('solicitud.create');
+    Route::post('/solicitud/propiedad', [SolicitudPropiedadController::class, 'store'])->name('solicitud.store');
+
 });
 
 //editar ------ propiedad
@@ -101,9 +105,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Registrar venta
     Route::post('/agente/venta/{id}', [AgenteController::class, 'registrarVenta'])->name('agente.registrarVenta');
-    Route::post('/agente/renta/{id}', [AgenteController::class, 'registrarRenta'])->name('agente.registrarRenta');
-    
-    Route::post('/agente/guardar-info-cliente/{propiedad}', [AgenteController::class, 'guardarInfoCliente'])->name('agente.guardarInfoCliente');
+    //RegistrarRenta
+    Route::post('agente/registrar-renta/{propiedad}', [AgenteController::class, 'registrarRenta'])->name('agente.registrarRenta');
+    Route::post('agente/guardar-info-cliente/{propiedad}', [AgenteController::class, 'guardarInfoCliente'])->name('agente.guardarInfoCliente');
 
     //propuesta
     Route::post('/agente/mensaje/enviar', [AgenteController::class, 'enviarMensaje'])->name('agente.enviarMensaje');
@@ -133,6 +137,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::put('/agentes/{id}', [AdminController::class, 'updateAgente'])->name('agentes.update');
     Route::delete('/agentes/{id}', [AdminController::class, 'destroyAgente'])->name('agentes.destroy');
 
+    //propiedade
+    Route::get('/admin/solicitudes', [AdminController::class, 'mostrarSolicitudes'])->name('solicitudes');
+    Route::get('/solicitudes/{id}', [AdminSolicitudController::class, 'VerSolicitudProp'])->name('solicitudes.show');
+    Route::post('/solicitudes/{id}/aprobar', [AdminSolicitudController::class, 'aprobar'])->name('solicitudes.aprobar');
+    Route::post('/solicitudes/{id}/rechazar', [AdminSolicitudController::class, 'rechazar'])->name('solicitudes.rechazar');
+    Route::get('/admin/solicitudes/{id}/editar', [SolicitudPropiedadController::class, 'editar'])->name('solicitudes.editar');
+    Route::put('/admin/solicitudes/{id}', [SolicitudPropiedadController::class, 'actualizar'])->name('solicitudes.actualizar');
+
+    Route::get('/propiedades/{id}/edit', [PropiedadController::class, 'editAdmin'])->name('propiedad.editAdmin');
+    Route::put('/propiedades/{id}', [PropiedadController::class, 'updateAdmin'])->name('propiedad.updateAdmin');
+    Route::delete('/propiedades/{id}', [PropiedadController::class, 'destroy'])->name('propiedad.destroy');
+
+    //usuario
+    Route::delete('/admin/clientes/{id}', [PerfilController::class, 'destroy'])->name('clientes.destroy');
+    Route::get('/admin/clientes/{id}', [PerfilController::class, 'showCliente'])->name('clientes.show');
+
     // Logout
     Route::post('/logout', function () {
         Auth::logout();
@@ -141,5 +161,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
 });
 
 
-//mensajes directos
+//mensajes directos agente - cliente
+Route::post('/mensajes', [MensajeInteraccionController::class, 'store'])->name('mensajes.store');
+
+//cliente agente
 Route::post('/mensajes', [MensajeInteraccionController::class, 'store'])->name('mensajes.store');

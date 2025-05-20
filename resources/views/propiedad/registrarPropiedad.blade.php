@@ -42,7 +42,7 @@
             </div>
         @endif
 
-        <form class="formulario" action="{{ route('propiedades.store') }}" method="POST" enctype="multipart/form-data">
+        <form class="formulario" action="{{ route('solicitud.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class= "cuadro">

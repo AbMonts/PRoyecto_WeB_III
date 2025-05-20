@@ -10,7 +10,7 @@ use App\Models\Imagen;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Usuario;
 use App\Models\SolicitudClienteAgente;
-
+use App\Models\MensajeInteraccion;
 
 
 class PropiedadController extends Controller
@@ -38,34 +38,77 @@ class PropiedadController extends Controller
     public function edit($id)
     {
         $propiedad = Propiedad::findOrFail($id);
-    
-        $agentes = Usuario::where('tipo', 'Agente')->where('disponible', true)->get();
 
-        // Verifica que la propiedad sea del usuario autenticado
+        // Solo el dueño o un admin puede editar
         if ($propiedad->usuario_id !== auth()->id()) {
             abort(403, 'No tienes permiso para editar esta propiedad.');
         }
-    
-        // Buscar si ya hay una solicitud activa del cliente actual para esta propiedad
-        $clienteId = auth()->id();
-    
-        $tieneSolicitudActiva = SolicitudClienteAgente::where('cliente_id', $clienteId)
-            ->where('propiedad_id', $id)
-            ->where('estado', 'pendiente') // o 'activo', según tu lógica
-            ->exists();
-    
-         // Obtener mensajes relacionados con la propiedad
-        $mensajes = \App\Models\MensajeInteraccion::where('propiedad_id', $id)
-        ->where(function ($query) {
-            $query->where('emisor_id', auth()->id())
-                ->orWhere('receptor_id', auth()->id());
-        })
-        ->orderBy('enviado_en', 'asc')
-        ->get();
 
-        return view('propiedad.edit', compact('propiedad', 'agentes', 'mensajes'));
+        $agentes = Usuario::where('tipo', 'Agente')->where('disponible', true)->get();
+        return view('propiedad.edit', compact('propiedad', 'agentes'));
+    }
+
+    public function editAdmin($id)
+    {
+        $propiedad = Propiedad::findOrFail($id);
+
+        // Solo el dueño o un admin puede editar
+        if ($propiedad->usuario_id !== auth()->id() && auth()->user()->tipo !== 'Admin') {
+            abort(403, 'No tienes permiso para editar esta propiedad.');
+        }
+
+        $agentes = Usuario::where('tipo', 'Agente')->where('disponible', true)->get();
+
+        $ventas = [];
+        $rentas = [];
+
+        if ($propiedad->estado === 'Vendida') {
+            $ventas = $propiedad->ventas;
+        }
+
+        if ($propiedad->estado === 'Rentada') {
+            $rentas = $propiedad->rentas;
+        }
+
+
+        return view('admin.propiedad.edit', compact('propiedad', 'agentes', 'ventas', 'rentas'));
+    }
+
+ public function updateAdmin(Request $request, $id)
+{
+    $propiedad = Propiedad::findOrFail($id);
+
+    if (auth()->user()->tipo !== 'Admin') {
+        abort(403, 'No tienes permiso para actualizar esta propiedad.');
+    }
+
+    $validated = $request->validate([
+        'tipo' => 'required|string|max:255',
+        'direccion' => 'required|string|max:255',
+        'referencias' => 'nullable|string|max:255',
+        'descripcion' => 'required|string',
+        'precio' => 'required|numeric',
+        'habitaciones' => 'nullable|integer',
+        'banos' => 'nullable|integer',
+        'dimensiones' => 'required|numeric',
+        'estado' => 'required|string',
+        'estado_actual' => 'nullable|string',
+        'garage' => 'required|boolean',
+        'agente_id' => 'nullable|exists:usuarios,id',
+        'documentos' => 'nullable|file|mimes:pdf,doc,docx,jpg,png,jpeg'
+    ]);
+
+    // Subir archivo si se cargó
+    if ($request->hasFile('documentos')) {
+        $path = $request->file('documentos')->store('documentos', 'public');
+        $validated['documentos'] = $path;
+    }
+
+    $propiedad->update($validated);
+
+    return redirect()->route('admin.propiedad.editAdmin', $id)
+        ->with('success', 'Propiedad actualizada correctamente.');
 }
-    
 
 
     public function create()
@@ -79,7 +122,7 @@ class PropiedadController extends Controller
     {
         $propiedad = Propiedad::findOrFail($id);
 
-        if ($propiedad->usuario_id !== auth()->id()) {
+        if ($propiedad->usuario_id !== auth()->id() && auth()->user()->tipo !== 'Admin') {
             abort(403, 'No puedes editar esta propiedad.');
         }
 

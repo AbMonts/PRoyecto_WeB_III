@@ -1,5 +1,24 @@
 /* ------------------ admin.css y agente -------------------------------------------*/
 
+  .navbar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn {
+            padding: 5px 10px;
+            background-color: #3490dc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        .btn-danger {
+            background-color: #e3342f;
+        }
+        
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -43,7 +62,9 @@ body {
 }
 
 
-
+.container{
+    margin: 2rem;
+}
 
 .containerloginagente {
     width: 20%;
@@ -172,3 +193,166 @@ button[type="submit"]:hover {
     width: 10rem;
     height: 2rem;
 }
+
+
+/*
+----------------------dashboardAdmin
+*/
+
+        .navbarAdmin {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btnAdmin {
+            padding: 5px 10px;
+            background-color: #3490dc;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        .btn-danger {
+            background-color: #e3342f;
+        }
+        .mensajeSuccess{
+            background-color: #d4edda; 
+            color: #155724; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-top: 20px;
+        }
+    
+
+/* --------------------------- solicitudes */
+
+    .solicitudes-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .columna {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .columna h2 {
+        text-align: center;
+    }
+
+    .solicitud-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin: 15px 0;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+    }
+
+    /* Media query para pantallas menores a 1024px */
+    @media (max-width: 1024px) {
+        .solicitudes-container {
+            flex-direction: column;
+        }
+
+        .columna {
+            width: 100%;
+        }
+    }
+
+    /* Media query para pantallas muy pequeñas (móviles) */
+    @media (max-width: 600px) {
+        .solicitud-card h3 {
+            font-size: 16px;
+        }
+
+        .solicitud-card p {
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+    }
+
+
+
+    /* dashboard admin */
+    .adminContainer {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.logoutForm {
+    display: inline;
+}
+
+.logoutBtn {
+    background: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.mensajeSuccess {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+}
+
+.panelSection {
+    margin-top: 30px;
+}
+
+.panelList {
+    list-style: none;
+    padding: 0;
+}
+
+.panelItem {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btnGroup {
+    display: flex;
+    gap: 10px;
+}
+
+/* Puedes ya tener estas clases, si no, agrégalas */
+.btn {
+    background-color: #007bff;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #a71d2a;
+}
+
+

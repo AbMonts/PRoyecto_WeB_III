@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class SolicitudAgenteController extends Controller
-{
+{   //el usuario envia solicitud de asociarse a agente
     public function enviar(Request $request)
     {
         $request->validate([

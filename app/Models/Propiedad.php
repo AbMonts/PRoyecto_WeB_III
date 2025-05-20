@@ -35,6 +35,11 @@ class Propiedad extends Model
     {
         return $this->hasMany(Venta::class, 'propiedad_id');
     }
+
+    public function rentas()
+    {
+        return $this->hasMany(Renta::class, 'propiedad_id');
+    }
     
     public function agente()
     {

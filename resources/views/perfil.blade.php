@@ -16,7 +16,7 @@
     <nav class="barra">
         <a href="{{ route('index') }}">Inicio</a>
         <a href="{{ route('propiedades') }}">Propiedades</a>
-        <a href="{{ route('propiedades.create') }}">Registrar Propiedad</a>
+        <a href="{{ route('solicitud.create') }}">Registrar Propiedad</a>
         <a href="{{ route('contacto') }}">Contacto</a>
         <a href="{{ route('logout') }}"
             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -96,10 +96,14 @@
                 </div>
             @endif
 
-              <!-- Botón para agregar nueva propiedad -->
-            <div style="margin-bottom: 1rem;">
-                <a href="{{ route('propiedades.create') }}" class="btn-agregar-propiedad" style="padding: 10px 20px; background-color: #007BFF; color: white; border-radius: 5px; text-decoration: none;">+ Agregar Propiedad</a>
-            </div>
+            <!-- Botón para agregar nueva propiedad -->
+            @if($tieneSolicitudPendiente || $tienePropiedad)
+                <button class="btn btn-secondary" disabled>Agregar Propiedad</button>
+                <p class="text-danger mt-2">Ya tienes una propiedad o una solicitud pendiente. Espera la revisión del administrador.</p>
+            @else
+                <a href="{{ route('solicitud.create') }}" class="btn btn-primary">Agregar Propiedad</a>
+            @endif
+
             <div class="propiedades">
                 @forelse ($misPropiedades as $prop)
                     <div class="propiedad">
@@ -133,6 +137,41 @@
             </div>
         </section>
 
+        <!-- Mis solicitudes -->
+        <section class="cont-2 perfil">
+            <h2 class="subtitulo">Mis Solicitudes</h2>
+
+            <div class="propiedades">
+                @forelse ($misSolicitudes as $solicitud)
+                    <div class="propiedad">
+                        <img src="{{ $solicitud->imagen_url ?? '../imgs/default.jpg' }}" alt="{{ $solicitud->tipo }}">
+                        <h3>{{ $solicitud->tipo }}</h3>
+                        <p>Precio: ${{ number_format($solicitud->precio) }}</p>
+                        <p>Ubicación: {{ $solicitud->direccion }}</p>
+                        <p><strong>Estado:</strong> 
+                            @if($solicitud->estado == 'pendiente')
+                                <span style="color: orange;">Pendiente</span>
+                            @elseif($solicitud->estado == 'aprobada')
+                                <span style="color: green;">Aprobada</span>
+                            @elseif($solicitud->estado == 'rechazada')
+                                <span style="color: red;">Rechazada</span>
+                            @endif
+                        </p>
+
+                        <div style="margin-top: 10px;">
+                            <a href="{{ route('solicitud.detalle', $solicitud->id) }}" style="text-decoration: underline;">Ver detalles</a>
+                            
+                            @if ($solicitud->estado === 'rechazada')
+                                <br>
+                                <a href="{{ route('solicitud.edit', $solicitud->id) }}" style="color: blue;">Editar y reenviar</a>
+                            @endif
+                        </div>
+                    </div>
+                @empty
+                    <p>No has enviado solicitudes.</p>
+                @endforelse
+            </div>
+        </section>
 
     </main>
 
@@ -149,18 +188,6 @@
 
     </footer>
     
-    <style>
-        .mensaje-exito {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin: 10px 0;
-            font-family: sans-serif;
-        }
-    </style>
-
     <script>
         setTimeout(() => {
             const mensaje = document.querySelector('.mensaje-exito');

@@ -6,19 +6,26 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Propiedad;
 use App\Models\HistorialVista;
 use App\Models\Destacado;
-
+use App\Models\SolicitudPropiedad;
+use App\Models\Usuario;
 
 class PerfilController extends Controller
 {
     public function show()
     {
         $usuario = auth()->user();
-    
+        $misSolicitudes = SolicitudPropiedad::where('cliente_id', $usuario->id)->latest()->get();
         // Obtener sus propiedades
         $misPropiedades = Propiedad::where('usuario_id', $usuario->id)->get();
+
+        $tieneSolicitudPendiente = SolicitudPropiedad::where('cliente_id', $usuario->id)
+        ->where('estado_solicitud', 'Pendiente')
+        ->exists();
+
+        $tienePropiedad = Propiedad::where('usuario_id', $usuario->id)->exists();
     
         // Historial de vistas del usuario (con la propiedad relacionada)
-        $historial = HistorialVista::where('usuario_id', auth()->id())
+        $historial = HistorialVista::where('usuario_id', $usuario->id)
             ->with('propiedad')
             ->latest('visto_en')
             ->get()
@@ -29,7 +36,7 @@ class PerfilController extends Controller
         // Propiedades destacadas (también con la propiedad relacionada)
         $destacados = Destacado::where('usuario_id', $usuario->id)->with('propiedad')->get();
     
-        return view('perfil', compact('usuario', 'misPropiedades', 'historial', 'destacados'));
+        return view('perfil', compact('usuario', 'misPropiedades', 'historial', 'destacados', 'misSolicitudes', 'tieneSolicitudPendiente', 'tienePropiedad'));
     }
 
     public function actualizar(Request $request)
@@ -52,6 +59,20 @@ class PerfilController extends Controller
         }
 
 
+        public function destroy($id)
+    {
+        $cliente = Usuario::findOrFail($id); // O Cliente::findOrFail($id)
+        $cliente->delete();
 
+        return redirect()->route('admin.dashboard')->with('success', 'Cliente eliminado correctamente.');
+    }
+
+    public function showCliente($id)
+{
+    $cliente = Usuario::findOrFail($id); // O Cliente::findOrFail($id)
+    $propiedades = Propiedad::where('usuario_id', $id)->get();
+
+    return view('admin.usuarios.showClientes', compact('cliente', 'propiedades'));
+}
 }
 

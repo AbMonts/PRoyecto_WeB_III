@@ -16,7 +16,7 @@ class Renta extends Model
         'propiedad_id',
         'agente_id',
         'cliente_id',
-        'precio_mensual',
+        'monto_mensual',
         'fecha_inicio',
         'fecha_fin'
     ];

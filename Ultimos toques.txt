@@ -1,1 +1,8 @@
-Entonces falta hacer que la venta sea hecha sin antes el cliente acepte dicha operacion al agente ---> vender/rentar
+Para agente
+Que si ya esta en renta ya no prmita registrar renta de nuevo()
+
+Para admin: 
+opcion de crear otra propiedad. que se vuelva a deshabilitar si se volvio a hacer la solicitud. ( )
+
+General: 
+en contacto poner la razones por las cuales se contactarian con el admin.
